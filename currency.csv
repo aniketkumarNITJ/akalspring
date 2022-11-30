@@ -1,0 +1,59 @@
+CurrencyName,CurrenyCode,FractionalCurrencyCode
+Afghan afghani,AFA,pul
+Algerian dinar,DZD,centime
+American dollar,USD,cent
+Argentinian peso,ARP,centavo
+Australian dollar,AUD,cent
+Austrian schilling,ATS*,groschen
+Bahamian dollar,BSD,cent
+Belgian franc,BEF*,centime
+Brazilian real,BRR,centavo
+British pound,GBP,penny
+Bulgarian lev,BGL,stotinka
+Canadian dollar,CAD,cent
+Chilean peso,CLP,centesimo
+Chinese yuan renminbi,CNY,fen
+Cyprus pound,CYP*,cent
+Czech koruna,CSK,haler
+Danish krone,DKK,øre
+Dutch guilder,NLG*,cent
+Egyptian pound,EGP,piaster
+European Euro,EUR,cent
+Finnish markka,FIM*,penni
+French franc,FRF*,centime
+German mark,DEM*,pfennig
+Greek drachma,GRD*,lepton
+Hong Kong dollar,HKD,cent
+Hungarian forint,HUF,fillér
+Indian rupee,INR,paisa
+Indonesian rupiah,IDR,sen
+Irish punt,IEP*,penny
+Israeli shekel,ILS,agora
+Italian lira,ITL*,centesimo
+Jamaican dollar,JMD,cent
+Japanese yen,JPY,sen (not used)
+Lebanese pound,LBP,piaster
+Luxembourg franc,LUF*,centime
+Malaysian ringgit,MYR,sen
+Mexican peso,MXP,centavo
+New Zealand dollar,NZD,cent
+Norwegian krone,NOK,øre
+Pakistani rupee,PKR,paisa
+Philippine peso,PHP,centavo
+Polish zloty,PLZ,grosz
+Portugese escudo,PTE*,centavo
+Romanian leu,ROL,ban
+Russian ruble,SUR,kopeck
+Saudi Arabian riyal,SAR,halala
+Singapore dollar,SGD,cent
+South African rand,ZAR,cent
+South Korean won,KRW,jeon
+Spanish peseta,ESP*,centimo
+Swedish krona,SEK,øre
+Swiss franc,CHF,centime
+Taiwan dollar,TWD,cent
+Thai baht,THB,satang
+Trinidad & Tobago dollar,TTD,cent
+Turkish lira,TRL,kurus
+Venezuelan bolivar,VEB,centimo
+Vietnamese dong,VND,xu

@@ -1,0 +1,574 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        var a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ',
+            'Eleven ',
+            'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '
+        ];
+        var b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+        function inWords(num) {
+            if (num == '0') return 'Zero ';
+            if ((num = num.toString()).length > 9) return 'overflow';
+            n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+            if (!n) return;
+            var str = '';
+            str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'Crore ' : '';
+            str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'Lakh ' : '';
+            str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'Thousand ' : '';
+            str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'Hundred ' : '';
+            str += (n[5] != 0) ? ((str != '') ? '' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) +
+                '' : '';
+            if (str == '') str = 'Zero '
+
+            return str;
+        }
+
+        bn = 1;
+        netWt = 0, qty = 0, totalAmount = 0;
+    </script>
+</head>
+
+<body>
+    {%if iProds|length%}
+    <table border="1" style="width: 100%;">
+        <thead>
+            <td colspan="7" style="text-align: center;">
+                <h2>PROFORMA INVOICE</h2>
+            </td>
+        </thead>
+        <tr>
+            <td colspan="4" rowspan="3">
+                <b>
+                    AKAL SPRING LIMITED<br>
+                    A-8, PHASE - V, FOCAL POINT,<br>
+                    LUDHIANA - 141010 (INDIA)<br>
+                    Tel: +91-161-4508008, 4507008
+                </b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">Profoma Invoice No. <br>
+                {{invoice}} Date: {{billDate}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                Other References: <br>
+                {{otherReferences}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" rowspan="4">
+                <b>
+                    Consignee:<br>
+                    {{customerId}}<br>
+                    {{customerId.company_address}}<br>
+                    {{customerId.company_country}}
+                </b>
+            </td>
+            <td rowspan="3" colspan="3">
+                <b>Buyer Other Than Consignee:</b>
+            </td>
+        </tr>
+        <tr></tr>
+        <tr></tr>
+        <tr>
+            <td colspan="2">
+                Country Of Origin Of Goods
+                <br><b>INDIA</b>
+            </td>
+            <td>
+                Country Of Final Destination
+                <br><b>{{finalDestination}}</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="border-bottom: none;">
+                Pre-Carriage By:
+            </td>
+            <td colspan="2" style="border-bottom: none;">
+                Place Of Rept.
+            </td>
+            <td colspan="3" rowspan="6">
+                Terms Of Delivery And Payment:<br>
+                {{termOfPayment}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-top: none;">
+                {{preCarriage}}
+            </td>
+            <td colspan="2" style="border-top: none;">
+                {{placeOfReceipt}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-bottom: none;">
+                Vessel No:
+            </td>
+            <td colspan="2" style="border-bottom: none;">
+                Port Of Loading:
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-top: none;">
+                {{vesselFlightNo}}
+            </td>
+            <td colspan="2" style="border-top: none;">
+                {{portOfLoading}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-bottom: none;">
+                Port Of Discharge:
+            </td>
+            <td colspan="2" style="border-bottom: none;">
+                Final Destination
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-top: none;">
+                {{portOfDischarge}}
+            </td>
+            <td colspan="2" style="border-top: none;">
+                {{finalDestination}}
+            </td>
+        </tr>
+    </table>
+
+    <table border="1" style="height: 50%; width: 100%;">
+        <tr>
+            <td colspan="1" style="text-align: center;"><b>Sr. No.</b></td>
+            <td colspan="5" style="text-align: center;"><b>Description of Good</b></td>
+            <td colspan="1" style="text-align: center;"><b>HSN Code</b></td>
+            <td colspan="1" style="text-align: center;"><b>UNIT</b></td>
+            <td colspan="1" style="text-align: center;"><b>Qty (Pcs.)</b></td>
+            <td colspan="1" style="text-align: center;"><b>Rate / PCS {{currency}}</b></td>
+            <td colspan="1" style="text-align: center;"><b>Total Amount In {{currency}}</b></td>
+        </tr>
+        <tr>
+            <td colspan="1" style="border-bottom: none;"></td>
+            <td colspan="5" style="border-bottom: none;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="text" value="{{descriptionOfGoods}}" style="width: 25rem;"
+                    onclick="this.style.border=`none`;" oninput="changeDescription(this.value)"
+                    class="descriptionOfGoods">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td colspan="1" style="border-bottom: none;"></td>
+            <td colspan="1" style="border-bottom: none;"></td>
+            <td colspan="1" style="border-bottom: none;"></td>
+            <td colspan="1" style="border-bottom: none;"></td>
+            <td colspan="1" style="border-bottom: none;"></td>
+        </tr>
+
+        <script>
+            bn = 1;
+            qty = 0;
+            totalAmount = 0;
+        </script>
+
+        {%for products in iProds%}
+        {%for product in products%}
+        <tr>
+            <td colspan="1" style="border-top: none; border-bottom:none;">
+                <script>
+                    document.write(bn);
+                    bn++;
+                </script>
+            </td>
+            <td colspan="5" style="border-top: none; border-bottom:none;">{{product.name}}</td>
+            <td colspan="1" style="border-top: none; border-bottom:none;">{{product.hsnCode}}</td>
+            <td colspan="1" style="border-top: none; border-bottom:none; text-align: right;">{{product.unit}}</td>
+            <td colspan="1" style="border-top: none; border-bottom:none; text-align: right;">{{product.qty}}</td>
+            <td colspan="1" style="border-top: none; border-bottom:none; text-align: right;">{{product.cpp}}</td>
+            <td colspan="1" style="border-top: none; border-bottom:none; text-align: right;">
+                <script>
+                    document.write((`{{product.cpp}}` * `{{product.qty}}`).toFixed(2))
+                    qty += Math.abs(`{{product.qty}}`)
+                    totalAmount += Math.abs(`{{product.cpp}}` * `{{product.qty}}`)
+                </script>
+            </td>
+        </tr>
+        {%endfor%}
+        {%endfor%}
+
+        {%if not nextLevel%}
+        {%for i in empty%}
+        <tr>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;">&nbsp;</td>
+            <td colspan="5" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+        </tr>
+        {%endfor%}
+        {%endif%}
+
+
+
+        <tr>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;">&nbsp;</td>
+            <td colspan="5" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+        </tr>
+        <tr>
+            <td colspan="1" style="border-top: none; border-bottom:none; "></td>
+            <td colspan="5" style="border-top: none; border-bottom:none; text-align: right;">TOTAL AMOUNT IN
+                {{currency}} :-
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1" style="text-align: right;">
+                <script>
+                    document.write(netWt.toFixed(3))
+                </script>
+            </td>
+            <td colspan="1" style="text-align: right;">
+                <script>
+                    document.write(qty)
+                </script>
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1" style="text-align: right;">
+                <script>
+                    document.write(totalAmount.toFixed(2))
+                </script>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="1" style="border-top: none; border-bottom:none;"></td>
+            <td colspan="5" style="border-top: none; border-bottom:none; text-align: right;">Total Amount :- </td>
+            <td colspan="5">
+                <script>
+                    dec = (totalAmount - Math.trunc(totalAmount)).toFixed(2);
+                    dec = dec.substr(2);
+                    amt = (inWords(Math.trunc(totalAmount)) +
+                        ' {{currencyCode}} and ' + inWords(
+                            dec) +
+                        ' {{fractionalCurrencyCode}} Only');
+                    document.write(`<input type="text" value="` + amt + `" style="width:99%">`);
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="8" style="border-right: none;">
+                <br>
+                <br>
+                <br>
+                Terms And Condiitions:
+                <br>
+                a.) Above prices are on {{deliveryTerms}} INDIAN PORT
+                <br>
+                b.) PACKING IN STEEL PALLETS
+                <br>
+                c.) DELIEVERY : MAXIMUM 30 DAYS FROM THE DATE OF RECEIPT OF ADVANCE
+                <br>
+                d.) SPECIFICATIONS: AS PER DRAWINGS APPROVED BY YOU.
+                <br>
+                BUYER'S SIGNATURE
+            </td>
+            <td colspan="3" style="border-left: none; text-align: right;">
+                for AKAL SPRING LTD.M
+                <br>
+                <br>
+                <br>
+                DIRECTOR
+            </td>
+        </tr>
+    </table>
+    <div>Continuation........{{forloop.counter}}</div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    {%endif%}
+
+    <table border="1" style="width: 100%;">
+        <thead>
+            <td colspan="7" style="text-align: center;">
+                <h2>PROFORMA INVOICE</h2>
+            </td>
+        </thead>
+        <tr>
+            <td colspan="4" rowspan="3">
+                <b>
+                    AKAL SPRING LIMITED<br>
+                    A-8, PHASE - V, FOCAL POINT,<br>
+                    LUDHIANA - 141010 (INDIA)<br>
+                    Tel: +91-161-4508008, 4507008
+                </b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">Profoma Invoice No. <br>
+                {{invoice}} Date: {{billDate}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                Other References: <br>
+                {{otherReferences}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" rowspan="4">
+                <b>
+                    Consignee:<br>
+                    {{customerId}}<br>
+                    {{customerId.company_address}}<br>
+                    {{customerId.company_country}}
+                </b>
+            </td>
+            <td rowspan="3" colspan="3">
+                <b>Buyer Other Than Consignee:</b>
+            </td>
+        </tr>
+        <tr></tr>
+        <tr></tr>
+        <tr>
+            <td colspan="2">
+                Country Of Origin Of Goods
+                <br><b>INDIA</b>
+            </td>
+            <td>
+                Country Of Final Destination
+                <br><b>{{finalDestination}}</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="border-bottom: none;">
+                Pre-Carriage By:
+            </td>
+            <td colspan="2" style="border-bottom: none;">
+                Place Of Rept.
+            </td>
+            <td colspan="3" rowspan="6">
+                Terms Of Delivery And Payment:<br>
+                {{termOfPayment}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-top: none;">
+                {{preCarriage}}
+            </td>
+            <td colspan="2" style="border-top: none;">
+                {{placeOfReceipt}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-bottom: none;">
+                Vessel No:
+            </td>
+            <td colspan="2" style="border-bottom: none;">
+                Port Of Loading:
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-top: none;">
+                {{vesselFlightNo}}
+            </td>
+            <td colspan="2" style="border-top: none;">
+                {{portOfLoading}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-bottom: none;">
+                Port Of Discharge:
+            </td>
+            <td colspan="2" style="border-bottom: none;">
+                Final Destination
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-top: none;">
+                {{portOfDischarge}}
+            </td>
+            <td colspan="2" style="border-top: none;">
+                {{finalDestination}}
+            </td>
+        </tr>
+    </table>
+
+    <table border="1" style="height: 50%; width: 100%;">
+        <tr>
+            <td colspan="1" style="text-align: center;"><b>Sr. No.</b></td>
+            <td colspan="5" style="text-align: center;"><b>Description of Good</b></td>
+            <td colspan="1" style="text-align: center;"><b>HSN Code</b></td>
+            <td colspan="1" style="text-align: center;"><b>UNIT</b></td>
+            <td colspan="1" style="text-align: center;"><b>Qty (Pcs.)</b></td>
+            <td colspan="1" style="text-align: center;"><b>Rate / PCS {{currency}}</b></td>
+            <td colspan="1" style="text-align: center;"><b>Total Amount In {{currency}}</b></td>
+        </tr>
+        <tr>
+            <td colspan="1" style="border-bottom: none;"></td>
+            <td colspan="5" style="border-bottom: none;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="text" value="{{descriptionOfGoods}}" style="width: 25rem;"
+                    onclick="this.style.border=`none`;" oninput="changeDescription(this.value)"
+                    class="descriptionOfGoods">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td colspan="1" style="border-bottom: none;"></td>
+            <td colspan="1" style="border-bottom: none;"></td>
+            <td colspan="1" style="border-bottom: none;"></td>
+            <td colspan="1" style="border-bottom: none;"></td>
+            <td colspan="1" style="border-bottom: none;"></td>
+        </tr>
+        <script>
+            bn = 1, qty = 0;
+        </script>
+        {%for product in eProds%}
+        <tr>
+            <td colspan="1" style="border-top: none; border-bottom:none;">
+                <script>
+                    document.write(bn);
+                    bn++;
+                </script>
+            </td>
+            <td colspan="5" style="border-top: none; border-bottom:none;">{{product.name}}</td>
+            <td colspan="1" style="border-top: none; border-bottom:none;">{{product.hsnCode}}</td>
+            <td colspan="1" style="border-top: none; border-bottom:none; text-align: right;">{{product.unit}}</td>
+            <td colspan="1" style="border-top: none; border-bottom:none; text-align: right;">{{product.qty}}</td>
+            <td colspan="1" style="border-top: none; border-bottom:none; text-align: right;">{{product.cpp}}</td>
+            <td colspan="1" style="border-top: none; border-bottom:none; text-align: right;">
+                <script>
+                    document.write((`{{product.cpp}}` * `{{product.qty}}`).toFixed(2))
+                    qty += Math.abs(`{{product.qty}}`)
+                    totalAmount += Math.abs(`{{product.cpp}}` * `{{product.qty}}`)
+                </script>
+            </td>
+        </tr>
+        {%endfor%}
+
+
+        {%if nextLevel%}
+        {%for i in empty%}
+        <tr>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;">&nbsp;</td>
+            <td colspan="5" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+        </tr>
+        {%endfor%}
+        {%endif%}
+
+
+        <tr>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;">&nbsp;</td>
+            <td colspan="5" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+        </tr>
+        <tr>
+            <td colspan="1" style="border-top: none; border-bottom:none; "></td>
+            <td colspan="5" style="border-top: none; border-bottom:none; text-align: right;">TOTAL AMOUNT IN
+                {{currency}} :-
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1" style="text-align: right;">
+            </td>
+            <td colspan="1" style="text-align: right;">
+                <script>
+                    document.write(qty)
+                </script>
+            </td>
+            <td colspan="1"></td>
+            <td colspan="1" style="text-align: right;">
+                <script>
+                    document.write(totalAmount.toFixed(2))
+                </script>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="1" style="border-top: none; border-bottom:none;"></td>
+            <td colspan="5" style="border-top: none; border-bottom:none; text-align: right;">Total Amount :- </td>
+            <td colspan="5">
+                <script>
+                    dec = (totalAmount - Math.trunc(totalAmount)).toFixed(2);
+                    dec = dec.substr(2);
+                    amt = (inWords(Math.trunc(totalAmount)) +
+                        ' {{currencyCode}} and ' + inWords(
+                            dec) +
+                        ' {{fractionalCurrencyCode}} Only');
+                    document.write(`<input type="text" value="` + amt + `" style="width:99%">`);
+                </script>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="8" style="border-right: none;">
+                <br>
+                <br>
+                <br>
+                Terms And Condiitions:
+                <br>
+                a.) Above prices are on {{deliveryTerms}} INDIAN PORT
+                <br>
+                b.) PACKING IN STEEL PALLETS
+                <br>
+                c.) DELIEVERY : MAXIMUM 30 DAYS FROM THE DATE OF RECEIPT OF ADVANCE
+                <br>
+                d.) SPECIFICATIONS: AS PER DRAWINGS APPROVED BY YOU.
+                <br>
+                BUYER'S SIGNATURE
+            </td>
+            <td colspan="3" style="border-left: none; text-align: right;">
+                for AKAL SPRING LTD.M
+                <br>
+                <br>
+                <br>
+                DIRECTOR
+            </td>
+        </tr>
+    </table>
+</body>
+<script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+
+<script>
+    function changeDescription(val) {
+        let arr = document.getElementsByClassName("descriptionOfGoods");
+
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            element.value = val;
+        }
+
+        let url = "/proformaInvoice/changeDescription";
+        $.get(url, {
+            "id": `{{billId}}`,
+            "val": val,
+        }, function (data, response) {
+            return;
+        })
+    }
+</script>
+
+
+</html>

@@ -1,0 +1,113 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    body {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <table style="margin-left: 15%; margin-top: 18%;" width="70%">
+        <tr>
+            <td colspan="4">ASL/
+                <script>
+                    var currentTime = new Date()
+                    var year = currentTime.getFullYear()
+                    document.write(year);
+                    document.write(" - ");
+                    document.write(year + 1);
+                </script>
+            </td>
+            <td colspan="2" style="text-align: right;">Date: <input type="text" onclick="removeBorder(this)"></td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                The Asst. General Manager,<br>
+                INDIAN BANK,<br>
+                SUNDER NAGAR,<br>
+                LUDHIANA<br>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <b>Sub: Shipment against our Invoice No. {{bill.invoice}} Dated {{bill.billDate}} to M/s {{bill.customerId}}, {{bill.customerId.company_country}}</b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Dear Sir,</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">We confirm having shipped {{bill.totalBoxes}} boxes containing Laminated Leaf Springs to M/s {{bill.customerId}}, {{bill.customerId.company_address}}, {{bill.customerId.company_country}} Invoice No. {{bill.invoice}} Dated {{bill.billDate}} for {{bill.currency}} <script>document.write(Math.abs(`{{bill.totalSales}}`).toFixed(2))</script>, Bill of Lading No. {{bill.billOfLadingNo}} Dated {{bill.ladingDate}}, Vessel {{bill.vesselFlightNo}}.
+                <br>
+                <p>We have received payment against this shipment dated {{bill.lcDate}}, vide Remittance Advice No. for {{bill.currency}} <script>document.write(Math.abs(`{{bill.totalSales}}`).toFixed(2))</script>.</p>
+                <p>We have couried the Original shipping documents directly  to buyers. However, for your reference we are enclosing herewith the following.</p>
+
+                1. Invoice No. {{bill.invoice}} DT. {{bill.billDate}} for {{bill.currency}} <script>document.write(Math.abs(`{{bill.totalSales}}`).toFixed(2))</script> <br>
+                2. Packing List<br>
+                3. Bill Of Lading<br>
+                4. Exporter Copy of Shipping Bill No. {{bill.shippingBillNo}} DT. {{bill.shippingBillDate}}}<br>
+                6. Remittance for {{bill.currency}} <script>document.write(Math.abs(`{{bill.totalSales}}`).toFixed(2))</script> (Realzation)<br>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">We request you to note and confirm and also issue BRC for the same.</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Regards</td>
+        </tr>
+        <tr>
+            <td colspan="6">For AKAL SPRING LIMITED</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">DIRECTOR</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Encl: as above</td>
+        </tr>
+    </table>
+</body>
+
+<script>
+    function removeBorder(e) {
+        e.style.border = "none"
+    }
+</script>
+
+</html>

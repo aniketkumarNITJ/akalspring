@@ -1,0 +1,290 @@
+{% extends "./base.html" %}
+
+{% block style %}
+<style>
+    td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    table {
+        table-layout: fixed;
+    }
+
+    ul {
+        display: flex;
+        list-style: none;
+    }
+
+    .modal-body {
+        max-height: calc(90vh - 200px);
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-content bg-white">
+
+    <!-- inner page banner END -->
+    <!-- contact area -->
+    <div class="section-full content-inner shop-account">
+        <!-- Product -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="font-weight-700 m-t0 m-b40">LETTERS SECTION</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 m-b30">
+                    <div class="p-a30 border-1  max-w500 m-auto">
+                        <div class="tab-content">
+                            <form id="login" class="tab-pane active" action="allBills" method="POST">
+                                {%csrf_token%}
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">FROM: </span>
+                                                <input name="billDateFrom" required class="form-control" type="date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">TO: </span>
+                                                <input name="billDateTo" required class="form-control" type="date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center m-t15">
+                                    <button class="site-button button-lg radius-no outline outline-2">Continue</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product END -->
+    </div>
+
+
+    <div class="section-full bg-white content-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sort-title clearfix text-center">
+                        <h4>Bills On Specified Date</h4>
+                    </div>
+                    <div class="section-content box-sort-in button-example p-t10 p-b30 ">
+                        <div class="dlab-tabs border bg-tabs">
+                            <ul class="nav nav-tabs">
+                                {%for bill in bills%}
+                                <li><a data-toggle="tab" href="#{{bill.id}}" {%if forloop.counter == 1%}class="active"
+                                        {%endif%}><i class="fa fa-book"></i>
+                                        <span class="title-head"> {{bill.invoice}}
+                                        </span></a></li>
+                                {%endfor%}
+                            </ul>
+                            <div class="tab-content">
+                                {% for bill in bills %}
+                                <div id="{{bill.id}}" class="tab-pane {%if forloop.counter == 1%}active{%endif%}">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Particulars</th>
+                                                <th scope="col">Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Bill Of Lading No</td>
+                                                <td>{{bill.billOfLadingNo}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lading Date</td>
+                                                <td>{%if bill.ladingDate%}{{bill.ladingDate}}{%endif%}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>LC No</td>
+                                                <td>{%if bill.lcNo%}{{bill.lcNo}}{%endif%}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>LC Date</td>
+                                                <td>{%if bill.lcDate%}{{bill.lcDate}}{%endif%}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Contract No</td>
+                                                <td>{%if bill.contractNo%}{{bill.contractNo}}{%endif%}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Contract Date</td>
+                                                <td>{%if bill.contractDate%}{{bill.contractDate}}{%endif%}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Shipping Bill No</td>
+                                                <td>{%if bill.shippingBillNo%}{{bill.shippingBillNo}}{%endif%}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Shipping Bill Date</td>
+                                                <td>{%if bill.shippingBillDate%}{{bill.shippingBillDate}}{%endif%}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Exchange No</td>
+                                                <td>{%if bill.exchangeNo%}{{bill.exchangeNo}}{%endif%}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Exchange Date</td>
+                                                <td>{%if bill.exchangeDate%}{{bill.exchangeDate}}{%endif%}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Consignee Bank</td>
+                                                <td>{%if bill.consigneeBank%}{{bill.consigneeBank}}{%endif%}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    {% if bill.lcNo is None and bill.lcDate is None and bill.contractNo is None and bill.contractDate is None and bill.shippingBillNo is None and bill.shippingBillDate is None and bill.exchangeNo is None and bill.exchangeDate is None and bill.consigneeBank is None%}
+                                    <div class="text-center m-t15">
+                                        <button class="site-button radius-no outline outline-2" data-toggle="modal"
+                                            data-target="#exampleModal" onclick='changeInvoice("{{bill.id}}")'>
+                                            Fill Form</button>
+                                    </div>
+                                    {% else %}
+                                    <div class="text-center m-t15">
+                                        <button class="site-button radius-no outline outline-2"
+                                            onclick="bankLetter(`{{bill.id}}`)">
+                                            Bank Letter (With LC)</button>
+                                        <button class="site-button radius-no outline outline-2"
+                                            onclick="billOfExchange(`{{bill.id}}`)">
+                                            Bill Of Exchange</button>
+                                        <button class="site-button radius-no outline outline-2"
+                                            onclick="exportOfDeclaration(`{{bill.id}}`)">
+                                            Export Declaration</button>
+                                        <button class="site-button radius-no outline outline-2"
+                                            onclick="bankLetter2(`{{bill.id}}`)">
+                                            Bank Letter (No LC)</button>
+                                        <button class="site-button radius-no outline outline-2"
+                                            onclick="shipmentLetter(`{{bill.id}}`)">
+                                            Shipment Letter</button>
+                                        <button class="site-button radius-no outline outline-2"
+                                            onclick="window.open(`http://127.0.0.1:8000/letters/edit?id={{bill.id}}`)">
+                                            Edit</button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {%endfor%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Fill The Form</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="addData" method="POST">
+                    {%csrf_token%}
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">LC No:</label>
+                        <input type="text" class="form-control" id="lcNo" name="lcNo">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">LC Date:</label>
+                        <input type="date" class="form-control" id="lcDate" name="lcDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Contract No:</label>
+                        <input type="text" class="form-control" id="contractNo" name="contractNo">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Contract Date:</label>
+                        <input type="date" class="form-control" id="contractDate" name="contractDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Shipping Bill No:</label>
+                        <input type="text" class="form-control" id="shippingBillNo" name="shippingBillNo">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Shipping Date:</label>
+                        <input type="date" class="form-control" id="shippingDate" name="shippingDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Exchange No:</label>
+                        <input type="text" class="form-control" id="exchangeNo" name="exchangeNo">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Exchange Date:</label>
+                        <input type="date" class="form-control" id="exchangeDate" name="exchangeDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Consigne Bank:</label>
+                        <input type="text" class="form-control" id="consigneBank" name="consigneBank">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Consigne Account:</label>
+                        <input type="text" class="form-control" id="consigneAccount" name="consigneAccount">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="billDate" name="billDate" style="display: none;">
+                        <input type="text" class="form-control" id="id" name="id" style="display: none;">
+                    </div>
+                    <div class="form-group" style="margin-left: 35%;">
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    function changeInvoice(id) {
+        document.getElementById("id").value = id;
+    }
+
+    function bankLetter(id) {
+        window.open("http://127.0.0.1:8000/letters/bankLetter?id=" + id);
+    }
+
+    function billOfExchange(id) {
+        window.open("http://127.0.0.1:8000/letters/billOfExchange?id=" + id);
+    }
+
+    function exportOfDeclaration(id) {
+        window.open("http://127.0.0.1:8000/letters/exportOfDeclaration?id=" + id);
+    }
+
+    function bankLetter2(id) {
+        window.open("http://127.0.0.1:8000/letters/bankLetter2?id=" + id);
+    }
+
+    function shipmentLetter(id) {
+        window.open("http://127.0.0.1:8000/letters/shipmentLetter?id=" + id);
+    }
+
+    function edit(id) {
+        document.getElementById("billId").value = id;
+    }
+</script>
+{% endblock %}

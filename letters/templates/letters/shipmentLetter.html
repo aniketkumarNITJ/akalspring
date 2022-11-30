@@ -1,0 +1,108 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    body {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <table style="margin-left: 15%; margin-top: 16%;" width="70%">
+        <tr>
+            <td colspan="4">Ref No. ASL/
+                <script>
+                    var currentTime = new Date()
+                    var year = currentTime.getFullYear()
+                    document.write(year);
+                    document.write(" - ");
+                    document.write(year + 1);
+                </script>
+            </td>
+            <td colspan="2" style="text-align: right;">Date: <input type="text" onclick="removeBorder(this)"></td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                M/s {{bill.customerId}}<br>
+                {{bill.customerId.company_address}},<br>
+                {{bill.customerId.company_country}}<br>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <b>Sub: Shipment against our Invoice No. {{bill.invoice}} Dated {{bill.billDate}}</b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Dear Sir,</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">We confirm having shipped {{bill.totalBoxes}} boxes containing Laminated Leaf Springs & Nut with Bolt vide our Invoice No {{bill.invoice}} Dated {{bill.billDate}},  Bill of Lading No. {{bill.billOfLadingNo}} Dated {{bill.ladingDate}} Per Vessel {{bill.vesselFlightNo}}<br>
+                <p>Please find enclosed the following documents:- </p>
+                1. Invoice - 3 copies<br>
+                2. Packing List - 3 copies<br>
+                3. Bill Of Lading - 3 Originals + 1 Non Negotiable copy<br>
+                4. Fumigation Certificate
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Thanking You</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Yours Truly</td>
+        </tr>
+        <tr>
+            <td colspan="6">For AKAL SPRING LIMITED</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">DIRECTOR</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Encl: as above</td>
+        </tr>
+    </table>
+</body>
+
+<script>
+    function removeBorder(e) {
+        e.style.border = "none"
+    }
+</script>
+
+</html>

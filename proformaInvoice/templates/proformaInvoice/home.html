@@ -1,0 +1,877 @@
+{% extends "./base.html" %}
+
+{% block style %}
+<style>
+    td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    table {
+        table-layout: fixed;
+    }
+
+    ul {
+        display: flex;
+        list-style: none;
+    }
+
+    .modal-body {
+        max-height: calc(90vh - 200px);
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-content bg-white">
+
+    <!-- inner page banner END -->
+    <!-- contact area -->
+    <div class="section-full content-inner shop-account">
+        <!-- Product -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="font-weight-700 m-t0 m-b40">PROFORMA INVOICE</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 m-b30">
+                    <div class="p-a30 border-1  max-w800 m-auto">
+                        <div class="tab-content">
+                            <form id="login" class="tab-pane active" action="allBills" method="POST">
+                                {%csrf_token%}
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">FROM: </span>
+                                                <input name="billDateFrom" required class="form-control" type="date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">TO: </span>
+                                                <input name="billDateTo" required class="form-control" type="date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center m-t15">
+                                    <button class="site-button button-lg radius-no outline outline-2">Continue</button>
+                                </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Product END -->
+</div>
+
+
+<div class="section-full bg-white content-inner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="sort-title clearfix text-center">
+                    <h4>Proforma Invoice On Specified Date</h4>
+                </div>
+                <div class="section-content box-sort-in button-example p-t10 p-b30 ">
+                    <div class="dlab-tabs border bg-tabs">
+                        <ul class="nav nav-tabs">
+                            {%for bill in bills%}
+                            <li><a data-toggle="tab" href="#{{bill.id}}" {%if forloop.counter == 1%}class="active"
+                                    {%endif%}><i class="fa fa-book"></i>
+                                    <span class="title-head"> {{bill.proformaInvoice}}
+                                    </span></a></li>
+                            {%endfor%}
+                            <li><a data-toggle="tab" href="#addNewBill" id="newBillAdder" onclick="startBilling()"><i
+                                        class="fa fa-plus-circle"></i> <span class="title-head"> ADD NEW</span></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            {% for bill in bills %}
+                            <div id="{{bill.id}}" class="tab-pane {%if forloop.counter == 1%}active{%endif%}">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Particulars</th>
+                                            <th scope="col">Data</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Other Reference(s)</td>
+                                            <td>{{bill.otherReferences}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Delivery Term</td>
+                                            <td>{{bill.deliveryTerms}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Country of Origin of Goods</td>
+                                            <td>India</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Country of Final Destination</td>
+                                            <td>{{bill.customerId.company_country}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Consigne</td>
+                                            <td>{{bill.customerId.company_name}},
+                                                {{bill.customerId.company_address}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Terms of Payment</td>
+                                            <td>{{bill.termsOfPayment}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Place Of Receipt</td>
+                                            <td>{{bill.placeOfReceipt}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pre-Carriage</td>
+                                            <td>{{bill.preCarriage}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Place of Receipt by pre-carrier</td>
+                                            <td>Ludhiana</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Vessel/Flight No.</td>
+                                            <td>{{bill.vesselFlightNo}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Port of Loading</td>
+                                            <td>{{bill.portOfLoading}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Port of Discharge</td>
+                                            <td>{{bill.portOfDischarge}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Final Destination</td>
+                                            <td>{{bill.finalDestination}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <br>
+                                <br>
+                                <br>
+
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="width: 5%;">Serial No</th>
+                                            <th scope="col" style="width: 15%;">Description</th>
+                                            <th scope="col" style="width: 13%;">HSNCode</th>
+                                            <th scope="col" style="width: 6%;">UNIT</th>
+                                            <th scope="col" style="width: 10%;">Qty(Pcs)</th>
+                                            <th scope="col" style="width: 15%;">Rate/Pce {{bill.currency}}</th>
+                                            <th scope="col" style="width: 15%;">Amount {{bill.currency}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <script>
+                                            bn = 0;
+                                        </script>
+                                        {%for product in bill.products%}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{product.name}}</td>
+                                            <td>{{product.hsnCode}}</td>
+                                            <td>{{product.unit}}</td>
+                                            <td>{{product.qty}}</td>
+                                            <td>{{product.cpp}}</td>
+                                            <td>
+                                                <script>
+                                                    document.write(Math.abs(`{{product.qty}}` *
+                                                        `{{product.cpp}}`).toFixed(2))
+                                                </script>
+                                            </td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                                <div class="text-center m-t15">
+                                    <button class="site-button radius-no outline outline-2"
+                                        onclick="window.open(`http://127.0.0.1:8000/proformaInvoice/pdf?id={{bill.id}}`)"
+                                        data-placement="bottom" title="Proforma Invoice">
+                                        Get Pdf</button>
+                                    <button class="site-button radius-no outline outline-2"
+                                        onclick="window.open(`http://127.0.0.1:8000/proformaInvoice/editBill?id={{bill.id}}`)"
+                                        data-placement="bottom" title="Edit Bill">
+                                        Edit</button>
+                                    <button class="site-button radius-no outline outline-2"
+                                        onclick="deleteBill('{{bill.id}}')" data-placement="bottom" title="Delete Bill">
+                                        Delete</button>
+                                </div>
+                            </div>
+
+                            {%endfor%}
+
+                            <div id="addNewBill" class="tab-pane">
+                                <form id="login" class="tab-pane active" method="POST"
+                                    onsubmit="event.preventDefault();billCreation(this)" action="addProformaInvoice">
+                                    {% csrf_token %}
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Particulars</th>
+                                                <th scope="col">Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Date Of Proforma Invoice</td>
+                                                <td>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <input name="proformaDate" type="date"
+                                                                    class="form-control" placeholder="Proforma Date"
+                                                                    required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Other Reference(s)</td>
+                                                <td>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <input name="otherReferences" type="text"
+                                                                    class="form-control"
+                                                                    placeholder="Other Reference(s)">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                            <tr>
+                                                <td>Consigne</td>
+                                                <td style="overflow: visible;">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="col-lg-6 col-md-6">
+                                                                <select name="customerId" type="text">
+                                                                    {% for company in companies %}
+                                                                    <option value="{{company}}">{{company}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Term Of Delivery & Payment</td>
+                                                <td>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <textarea name="termsOfPayment" type="text"
+                                                                    class="form-control"
+                                                                    placeholder="Term Of Payment"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Delivery Terms</td>
+                                                <td style="overflow: visible;">
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <input name="deliveryTerms" type="text"
+                                                                    class="form-control"
+                                                                    placeholder="Delievery Terms like FOB">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pre-Carriage</td>
+                                                <td>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <input name="preCarriage" type="text"
+                                                                    class="form-control" placeholder="Pre-Carriage">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Vessel / Flight No</td>
+                                                <td>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <input name="vesselFlightNo" type="text"
+                                                                    class="form-control"
+                                                                    placeholder="Vessel / Flight No">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Place Of Receipt: </td>
+                                                <td>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <input name="placeOfReceipt" type="text"
+                                                                    class="form-control"
+                                                                    placeholder="Place Of Receipt By Pre-Carrier">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Port Of Loading</td>
+                                                <td>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <input name="portOfLoading" type="text"
+                                                                    class="form-control" placeholder="Port Of Loading">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Port Of Discharge</td>
+                                                <td>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <input name="portOfDischarge" type="text"
+                                                                    class="form-control"
+                                                                    placeholder="Port Of Discharge">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Final Destination</td>
+                                                <td>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <input name="finalDestination" type="text"
+                                                                    class="form-control"
+                                                                    placeholder="Final Destination">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Currency</td>
+                                                <td style="overflow: visible;">
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="form-group">
+                                                            <div class="input-group">
+                                                                <select name="currency" class="form-control"
+                                                                    placeholder="Currency">
+                                                                    <option
+                                                                        value="America (United States) Dollars - USD">
+                                                                        America (United States) Dollars – USD
+                                                                    </option>
+                                                                    <option value="Afghanistan Afghanis - AFN">
+                                                                        Afghanistan Afghanis – AFN</option>
+                                                                    <option value="Albania Leke - ALL">Albania Leke
+                                                                        – ALL</option>
+                                                                    <option value="Algeria Dinars - DZD">Algeria
+                                                                        Dinars – DZD</option>
+                                                                    <option value="Argentina Pesos - ARS">Argentina
+                                                                        Pesos – ARS</option>
+                                                                    <option value="Australia Dollars - AUD">
+                                                                        Australia Dollars – AUD</option>
+                                                                    <option value="Austria Schillings - ATS">Austria
+                                                                        Schillings – ATS</OPTION>
+
+                                                                    <option value="Bahamas Dollars - BSD">Bahamas
+                                                                        Dollars – BSD</option>
+                                                                    <option value="Bahrain Dinars - BHD">Bahrain
+                                                                        Dinars – BHD</option>
+                                                                    <option value="Bangladesh Taka - BDT">Bangladesh
+                                                                        Taka – BDT</option>
+                                                                    <option value="Barbados Dollars - BBD">Barbados
+                                                                        Dollars – BBD</option>
+                                                                    <option value="Belgium Francs - BEF">Belgium
+                                                                        Francs – BEF</OPTION>
+                                                                    <option value="Bermuda Dollars - BMD">Bermuda
+                                                                        Dollars – BMD</option>
+
+                                                                    <option value="Brazil Reais - BRL">Brazil Reais
+                                                                        – BRL</option>
+                                                                    <option value="Bulgaria Leva - BGN">Bulgaria
+                                                                        Leva – BGN</option>
+                                                                    <option value="Canada Dollars - CAD">Canada
+                                                                        Dollars – CAD</option>
+                                                                    <option value="CFA BCEAO Francs - XOF">CFA BCEAO
+                                                                        Francs – XOF</option>
+                                                                    <option value="CFA BEAC Francs - XAF">CFA BEAC
+                                                                        Francs – XAF</option>
+                                                                    <option value="Chile Pesos - CLP">Chile Pesos –
+                                                                        CLP</option>
+
+                                                                    <option value="China Yuan Renminbi - CNY">China
+                                                                        Yuan Renminbi – CNY</option>
+                                                                    <option value="RMB (China Yuan Renminbi) - CNY">
+                                                                        RMB (China Yuan Renminbi) – CNY</option>
+                                                                    <option value="Colombia Pesos - COP">Colombia
+                                                                        Pesos – COP</option>
+                                                                    <option value="CFP Francs - XPF">CFP Francs –
+                                                                        XPF</option>
+                                                                    <option value="Costa Rica Colones - CRC">Costa
+                                                                        Rica Colones – CRC</option>
+                                                                    <option value="Croatia Kuna - HRK">Croatia Kuna
+                                                                        – HRK</option>
+
+                                                                    <option value="Cyprus Pounds - CYP">Cyprus
+                                                                        Pounds – CYP</option>
+                                                                    <option value="Czech Republic Koruny - CZK">
+                                                                        Czech Republic Koruny – CZK</option>
+                                                                    <option value="Denmark Kroner - DKK">Denmark
+                                                                        Kroner – DKK</option>
+                                                                    <option value="Deutsche (Germany) Marks - DEM">
+                                                                        Deutsche (Germany) Marks – DEM</OPTION>
+                                                                    <option value="Dominican Republic Pesos - DOP">
+                                                                        Dominican Republic Pesos – DOP</option>
+                                                                    <option value="Dutch (Netherlands) Guilders - NLG">
+                                                                        Dutch (Netherlands) Guilders – NLG</OPTION>
+
+                                                                    <option value="Eastern Caribbean Dollars - XCD">
+                                                                        Eastern Caribbean Dollars – XCD</option>
+                                                                    <option value="Egypt Pounds - EGP">Egypt Pounds
+                                                                        – EGP</option>
+                                                                    <option value="Estonia Krooni - EEK">Estonia
+                                                                        Krooni – EEK</option>
+                                                                    <option value="Euro - EUR">Euro – EUR</option>
+                                                                    <option value="Fiji Dollars - FJD">Fiji Dollars
+                                                                        – FJD</option>
+                                                                    <option value="Finland Markkaa - FIM">Finland
+                                                                        Markkaa – FIM</OPTION>
+
+                                                                    <option value="France Francs - FRF*">France
+                                                                        Francs – FRF*</OPTION>
+                                                                    <option value="Germany Deutsche Marks - DEM">
+                                                                        Germany Deutsche Marks – DEM</OPTION>
+                                                                    <option value="Gold Ounces - XAU">Gold Ounces –
+                                                                        XAU</option>
+                                                                    <option value="Greece Drachmae - GRD">Greece
+                                                                        Drachmae – GRD</OPTION>
+                                                                    <option value="Guatemalan Quetzal - GTQ">
+                                                                        Guatemalan Quetzal – GTQ</OPTION>
+                                                                    <option
+                                                                        value="Holland (Netherlands) Guilders - NLG">
+                                                                        Holland (Netherlands) Guilders – NLG
+                                                                    </OPTION>
+                                                                    <option value="Hong Kong Dollars - HKD">Hong
+                                                                        Kong Dollars – HKD</option>
+
+                                                                    <option value="Hungary Forint - HUF">Hungary
+                                                                        Forint – HUF</option>
+                                                                    <option value="Iceland Kronur - ISK">Iceland
+                                                                        Kronur – ISK</option>
+                                                                    <option value="IMF Special Drawing Right - XDR">
+                                                                        IMF Special Drawing Right – XDR</option>
+                                                                    <option value="India Rupees - INR">India Rupees
+                                                                        – INR</option>
+                                                                    <option value="Indonesia Rupiahs - IDR">
+                                                                        Indonesia Rupiahs – IDR</option>
+                                                                    <option value="Iran Rials - IRR">Iran Rials –
+                                                                        IRR</option>
+
+                                                                    <option value="Iraq Dinars - IQD">Iraq Dinars –
+                                                                        IQD</option>
+                                                                    <option value="Ireland Pounds - IEP*">Ireland
+                                                                        Pounds – IEP*</OPTION>
+                                                                    <option value="Israel New Shekels - ILS">Israel
+                                                                        New Shekels – ILS</option>
+                                                                    <option value="Italy Lire - ITL*">Italy Lire –
+                                                                        ITL*</OPTION>
+                                                                    <option value="Jamaica Dollars - JMD">Jamaica
+                                                                        Dollars – JMD</option>
+                                                                    <option value="Japan Yen - JPY">Japan Yen – JPY
+                                                                    </option>
+
+                                                                    <option value="Jordan Dinars - JOD">Jordan
+                                                                        Dinars – JOD</option>
+                                                                    <option value="Kenya Shillings - KES">Kenya
+                                                                        Shillings – KES</option>
+                                                                    <option value="Korea (South) Won - KRW">Korea
+                                                                        (South) Won – KRW</option>
+                                                                    <option value="Kuwait Dinars - KWD">Kuwait
+                                                                        Dinars – KWD</option>
+                                                                    <option value="Lebanon Pounds - LBP">Lebanon
+                                                                        Pounds – LBP</option>
+                                                                    <option value="Luxembourg Francs - LUF">
+                                                                        Luxembourg Francs – LUF</OPTION>
+
+                                                                    <option value="Malaysia Ringgits - MYR">Malaysia
+                                                                        Ringgits – MYR</option>
+                                                                    <option value="Malta Liri - MTL">Malta Liri –
+                                                                        MTL</option>
+                                                                    <option value="Mauritius Rupees - MUR">Mauritius
+                                                                        Rupees – MUR</option>
+                                                                    <option value="Mexico Pesos - MXN">Mexico Pesos
+                                                                        – MXN</option>
+                                                                    <option value="Morocco Dirhams - MAD">Morocco
+                                                                        Dirhams – MAD</option>
+                                                                    <option value="Netherlands Guilders - NLG">
+                                                                        Netherlands Guilders – NLG</OPTION>
+
+                                                                    <option value="New Zealand Dollars - NZD">New
+                                                                        Zealand Dollars – NZD</option>
+                                                                    <option value="Norway Kroner - NOK">Norway
+                                                                        Kroner – NOK</option>
+                                                                    <option value="Oman Rials - OMR">Oman Rials –
+                                                                        OMR</option>
+                                                                    <option value="Pakistan Rupees - PKR">Pakistan
+                                                                        Rupees – PKR</option>
+                                                                    <option value="Palladium Ounces - XPD">Palladium
+                                                                        Ounces – XPD</option>
+                                                                    <option value="Peru Nuevos Soles - PEN">Peru
+                                                                        Nuevos Soles – PEN</option>
+
+                                                                    <option value="Philippines Pesos - PHP">
+                                                                        Philippines Pesos – PHP</option>
+                                                                    <option value="Platinum Ounces - XPT">Platinum
+                                                                        Ounces – XPT</option>
+                                                                    <option value="Poland Zlotych - PLN">Poland
+                                                                        Zlotych – PLN</option>
+                                                                    <option value="Portugal Escudos - PTE">Portugal
+                                                                        Escudos – PTE</OPTION>
+                                                                    <option value="Qatar Riyals - QAR">Qatar Riyals
+                                                                        – QAR</option>
+                                                                    <option value="Romania New Lei - RON">Romania
+                                                                        New Lei – RON</option>
+
+                                                                    <option value="Romania Lei - ROL">Romania Lei –
+                                                                        ROL</option>
+                                                                    <option value="Russia Rubles - RUB">Russia
+                                                                        Rubles – RUB</option>
+                                                                    <option value="Saudi Arabia Riyals - SAR">Saudi
+                                                                        Arabia Riyals – SAR</option>
+                                                                    <option value="Silver Ounces - XAG">Silver
+                                                                        Ounces – XAG</option>
+                                                                    <option value="Singapore Dollars - SGD">
+                                                                        Singapore Dollars – SGD</option>
+                                                                    <option value="Slovakia Koruny - SKK">Slovakia
+                                                                        Koruny – SKK</option>
+
+                                                                    <option value="Slovenia Tolars - SIT">Slovenia
+                                                                        Tolars – SIT</option>
+                                                                    <option value="South Africa Rand - ZAR">South
+                                                                        Africa Rand – ZAR</option>
+                                                                    <option value="South Korea Won - KRW">South
+                                                                        Korea Won – KRW</option>
+                                                                    <option value="Spain Pesetas - ESP">Spain
+                                                                        Pesetas – ESP</OPTION>
+                                                                    <option value="Special Drawing Rights (IMF) - XDR">
+                                                                        Special Drawing Rights (IMF) – XDR</option>
+                                                                    <option value="Sri Lanka Rupees - LKR">Sri Lanka
+                                                                        Rupees – LKR</option>
+
+                                                                    <option value="Sudan Dinars - SDD">Sudan Dinars
+                                                                        – SDD</option>
+                                                                    <option value="Sweden Kronor - SEK">Sweden
+                                                                        Kronor – SEK</option>
+                                                                    <option value="Switzerland Francs - CHF">
+                                                                        Switzerland Francs – CHF</option>
+                                                                    <option value="Taiwan New Dollars - TWD">Taiwan
+                                                                        New Dollars – TWD</option>
+                                                                    <option value="Thailand Baht - THB">Thailand
+                                                                        Baht – THB</option>
+                                                                    <option value="Trinidad and Tobago Dollars - TTD">
+                                                                        Trinidad and Tobago Dollars – TTD</option>
+
+                                                                    <option value="Tunisia Dinars - TND">Tunisia
+                                                                        Dinars – TND</option>
+                                                                    <option value="Turkey New Lira - TRY">Turkey New
+                                                                        Lira – TRY</option>
+                                                                    <option value="United Arab Emirates Dirhams - AED">
+                                                                        United Arab Emirates Dirhams – AED</option>
+                                                                    <option value="United Kingdom Pounds - GBP">
+                                                                        United Kingdom Pounds – GBP</option>
+                                                                    <option value="United States Dollars - USD">
+                                                                        United States Dollars – USD</option>
+                                                                    <option value="Venezuela Bolivares - VEB">
+                                                                        Venezuela Bolivares – VEB</option>
+
+                                                                    <option value="Vietnam Dong - VND">Vietnam Dong
+                                                                        – VND</option>
+                                                                    <option value="Zambia Kwacha - ZMK">Zambia
+                                                                        Kwacha – ZMK</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div id="productList">
+
+                                    </div>
+
+                                    <div class="container">
+                                        <div class="col-lg-12 post card-container">
+                                            <div class="section-content box-sort-in  button-example m-b30"
+                                                style="margin-left: 42%;">
+                                                <button class="site-button green radius-xl  m-r15" type="button"
+                                                    onclick="addNewProdList()">Add <i
+                                                        class="fa fa-plus-circle bg-green text-white"></i></button>
+                                                <button class="site-button red radius-xl  m-r15" type="button"
+                                                    onclick="removeProductList()">Rem <i
+                                                        class="fa fa-minus-circle bg-red text-white"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center m-t15">
+                                        <button class="site-button radius-no outline outline-2">
+                                            Save Bill</button>
+                                    </div>
+
+                                    <input type="number" name="totalProds" id="totalProds" style="display: none;">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- </div> -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Add New Delivery Term</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" style="width: 100%;" id="newDeliveryTerm">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="getData()">Select</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block script %}
+<script>
+    let totalProds = 0;
+
+    function getData() {
+        newDelie = document.getElementById("newDeliveryTerm").value;
+        document.getElementById("deliveryTerms").innerHTML = `<option value=` + newDelie + ` selected id ="newD">` +
+            newDelie + `</option>`;
+        document.getElementById("deliveryTerms").value = newDelie;
+        document.getElementById("deliveryTerms").click();
+        $('#exampleModalCenter').modal('hide')
+    }
+
+    function startBilling() {
+        totalProds = 1;
+        const div = document.createElement('div');
+        // div.id = "productGroup" + totalProds;
+        div.className = "row";
+        div.innerHTML = `<div class="col-lg-1 col-md-1">
+                                                <div class="form-group">
+                                                    <label for="">Sr. No</label>
+                                                    <div class="input-group">
+                                                        <div>` + totalProds + `</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Product</label>
+                                                    <div class="input-group">
+                                                        <select name="productId` + totalProds + `" type="text" required
+                                                            class="form-control" placeholder="Product">
+                                                            {% for product in products %}
+                                                            <option
+                                                                value='{"name" : "{{product.product_name}}", "hsnCode" : "{{product.hsnCode}}", "weight" : "{{product.weight}}"}'>
+                                                                {{product.product_name}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label for="">Cost Per Pce</label>
+                                                    <div class="input-group">
+                                                        <input name="cpp` + totalProds + `" type="number" required class="form-control"
+                                                            placeholder="Cost per piece" min="0" step="0.01">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label for="">Quantity</label>
+                                                    <div class="input-group">
+                                                        <input name="qty` + totalProds + `" type="number" required class="form-control"
+                                                            placeholder="Quantity" min="1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label for="">UNIT</label>
+                                                    <div class="input-group">
+                                                        <select name="unit` + totalProds + `" type="text" required
+                                                            class="form-control" placeholder="Product">
+                                                            <option value="PCS">PCS</option>    
+                                                            <option value="SET">SET</option>    
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>`;
+        document.getElementById('productList').innerHTML = "";
+        document.getElementById('productList').appendChild(div);
+    }
+
+    function addNewProdList() {
+        let prodType = document.getElementsByName('productId' + totalProds)[0].value;
+        prodParsed = JSON.parse(prodType)
+        name = prodParsed["name"]
+        let prodCostPerPce = document.getElementsByName('cpp' + totalProds)[0].value;
+        let prodQty = document.getElementsByName('qty' + totalProds)[0].value;
+        let unit = document.getElementsByName('unit' + totalProds)[0].value;
+
+        totalProds++;
+        const div = document.createElement('div');
+        div.className = "row";
+        div.innerHTML = `
+                                                <div class="col-lg-1 col-md-1">
+                                                <div class="form-group">
+                                                    <label for="">Sr. No</label>
+                                                    <div class="input-group">
+                                                        <div>` + totalProds + `</div>
+                                                    </div>
+                                                </div>
+                                            </div><div class="col-lg-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Product</label>
+                                                    <div class="input-group">
+                                                        <select name="productId` + totalProds + `" type="text" required
+                                                            class="form-control" placeholder="Product">
+                                                            <option selected value='` + prodType + `'>` + name + `
+                                                            </option>
+                                                            {% for product in products %}
+                                                            <option
+                                                                value='{"name" : "{{product.product_name}}", "hsnCode" : "{{product.hsnCode}}", "weight" : "{{product.weight}}"}'>
+                                                                {{product.product_name}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label for="">Cost Per Pce</label>
+                                                    <div class="input-group">
+                                                        <input name="cpp` + totalProds + `" type="number" required class="form-control"
+                                                            placeholder="Cost per piece" min="0" step="0.01" value="` +
+            prodCostPerPce + `">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label for="">Quantity</label>
+                                                    <div class="input-group">
+                                                        <input name="qty` + totalProds + `" type="number" required class="form-control"
+                                                            placeholder="Quantity" min="1" value="` + prodQty + `">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label for="">UNIT</label>
+                                                    <div class="input-group">
+                                                        <select name="unit` + totalProds + `" type="text" required
+                                                            class="form-control" placeholder="Product" value="` +
+            unit + `">
+                                                            <option value="PCS">PCS</option>    
+                                                            <option value="SET">SET</option>    
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>`;
+        document.getElementById('productList').appendChild(div);
+    }
+
+    function removeProductList() {
+        if (totalProds == 1) {
+            alert("You Have To Fill Atleast One Product Data");
+            return;
+        }
+
+        var list = document.getElementById("productList");
+        list.removeChild(list.childNodes[totalProds - 1]);
+        totalProds--;
+    }
+
+    function billCreation(e) {
+        document.getElementById("totalProds").value = totalProds;
+        e.submit();
+    }
+
+    function deleteBill(billId) {
+
+        if (confirm("Your Sure To Delete This Bill")) {
+            $.post("deleteBill", {
+                    id: billId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                function (data, status) {
+                    alert(data);
+
+                    if (status == "success") {
+                        window.location.reload();
+                    }
+                });
+        }
+    }
+</script>
+{% endblock %}

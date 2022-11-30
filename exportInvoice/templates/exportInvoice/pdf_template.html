@@ -1,0 +1,965 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ',
+            'Eleven ',
+            'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '
+        ];
+        var b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+        function inWords(num) {
+            if (num == '0') return 'Zero ';
+            if ((num = num.toString()).length > 9) return 'overflow';
+            n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+            if (!n) return;
+            var str = '';
+            str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'Crore ' : '';
+            str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'Lakh ' : '';
+            str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'Thousand ' : '';
+            str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'Hundred ' : '';
+            str += (n[5] != 0) ? ((str != '') ? '' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) +
+                '' : '';
+            if (str == '') str = 'Zero '
+
+            return str;
+        }
+
+        bn = 1;
+        netWt = 0, qty = 0, totalAmount = 0;
+
+
+        function parserInvoice(str) {
+            while (str.length < 17) {
+                str = str.substr(0, 4) + '0' + str.substr(4);
+            }
+            str = str.slice(0, 13) + str.slice(15);
+            return str;
+        }
+    </script>
+</head>
+
+<body>
+
+    {%for products in iProds%}
+    <div id="pdfFormer">
+        <table border="1" style="height: 50%; width: 100%;">
+            <tbody cellpadding="2">
+                <tr>
+                    <td colspan="9">
+                        <h1 style="text-align: center;">EXPORT INVOICE</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100">
+                        <h3 style="text-align:center;">Supply meant for export under Letter of undertaking with
+                            payment
+                            of IGST</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan=2 colspan=3>
+                        <b>Exporter:</b>
+                        <br>
+                        <b>AKAL SPRING LTD</b><br>
+                        <b>A-8, PHASE V, FOCAL POINT</b><br>
+                        <b>LUDHIANA - 141 010, INDIA</b>
+                    </td>
+                    <td colspan="3" style="text-align: center; border-bottom: none;">
+                        Invoice No. & Date: <br>
+                    </td>
+                    <td colspan="2" style="border-bottom: none; text-align: center;">Exporter's Ref:</td>
+                </tr>
+                </td>
+                <tr>
+                    <td colspan="3" style="border-top:none; text-align: center;"><b>
+                            <script>
+                                document.write(parserInvoice(`{{invoice}}`));
+                            </script> Dt. {{billDate}}
+                        </b>
+                    </td>
+                    <td style="border-top:none; text-align: center;" colspan="2"><br>
+                        <b>IEC NO.3089007959</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" rowspan="3"></td>
+                    <td colspan="5">Other Reference(s):&nbsp;&nbsp;&nbsp;&nbsp;{{otherReferences}}</td>
+                </tr>
+                <tr>
+                    <td colspan="5">GST NO. 03AABCA4456A1ZF</td>
+                </tr>
+                <tr>
+                    <td colspan="5">Other Than Consignee: <br>
+                        <b><input type="text" value="{{otherThanConsignee}}" style="border: none; width: 100%;"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" rowspan="3">
+                        <b>
+                            Consignee:-<br><br>
+                        </b>
+                        <br>
+                        <input type="text" value="{{customerId.name}}" onclick="this.style.border = `none`"
+                            style="font-size: 1rem; font-weight: bold; width: 90%; border: none;" class="compName"
+                            oninput="updatecompName(this.value)">
+
+                        {%if customerId.split_address%}
+                        <input type="text" value="{{customerId.address1}}" onclick="this.style.border = `none`"
+                            style="font-size: 1rem; font-weight: bold; width: 90%;border: none;" class="address"
+                            oninput="updateAddress(this.value)">
+                        <input type="text" value="{{customerId.address2}}" onclick="this.style.border = `none`"
+                            style="font-size: 1rem; font-weight: bold; width: 90%;border: none;" class="address"
+                            oninput="updateAddress(this.value)">
+                        {%else%}
+                        <input type="text" value="{{customerId.address}}" onclick="this.style.border = `none`"
+                            style="font-size: 1rem; font-weight: bold; width: 90%;border: none;" class="address"
+                            oninput="updateAddress(this.value)">
+                        {%endif%}
+
+                        <input type="text" value="{{customerId.country}}" onclick="this.style.border = `none`"
+                            style="font-size: 1rem; font-weight: bold; width: 90%;border: none;" class="country"
+                            oninput="updateCountry(this.value)">
+                    </td>
+                    <td colspan="5"><b>Bill of Lading No:-
+                            {{billOfLadingNo}}
+                            {%if ladingDate %} DT. {{ladingDate}} {%endif%}</b></td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: center;">Country of Origin of Goods<br>
+                        <b>INDIA</b>
+                    </td>
+                    <td colspan="2" style="text-align: center;">Country of Final Destination<br>
+                        <b>{{customerId.country}}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <b>Terms of Payment :-<br>
+                            {{termOfPayment}}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="1">Pre- Carriage<br>
+                        {{preCarriage}}
+                    </td>
+                    <td colspan="1">
+                        Place of Receipt by Pre-Carrier<br>
+                        Ludhiana
+                    </td>
+                    <td colspan="6" rowspan="3">
+                        <b>Nature of Contract :-<br>
+                            {{natureOfContract}}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Vessel / Flight No.<br>
+                        {{vesselFlightNo}}
+                    </td>
+                    <td>
+                        Port of Loading:<br>
+                        {{portOfLoading}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Port of Discharge: <br>
+                        {{portOfDischarge}}
+                    </td>
+                    <td>Final Destination:<br>
+                        {{finalDestination}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table border="1" style="height: 50%; width: 100%;">
+            <tr>
+                <td colspan="1" style="text-align: center;"><b>Sr. No.</b></td>
+                <td colspan="5" style="text-align: center;"><b>Description of Good</b></td>
+                <td colspan="1" style="text-align: center;"><b>HSN Code</b></td>
+                <td colspan="1" style="text-align: center;"><b>Net WT. (kg)</b></td>
+                <td colspan="1" style="text-align: center;"><b>Qty(Pcs)</b></td>
+                <td colspan="1" style="text-align: center;"><b>Rate/Pcs({{currencyCode}})</b></td>
+                <td colspan="1" style="text-align: center;"><b>Total Amount({{currencyCode}})</b></td>
+            </tr>
+            <tr>
+                <td colspan="1" style="border-bottom: none;"></td>
+                <td colspan="5" style="border-bottom: none;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <textarea onclick="this.style.border=`none`;" style="width:98%; text-align: center;border: none;"
+                        oninput="changeDescription(this.value)"
+                        class="descriptionOfGoods">{{descriptionOfGoods}}</textarea>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td colspan="1" style="border-bottom: none;"></td>
+                <td colspan="1" style="border-bottom: none;"></td>
+                <td colspan="1" style="border-bottom: none;"></td>
+                <td colspan="1" style="border-bottom: none;"></td>
+                <td colspan="1" style="border-bottom: none;"></td>
+            </tr>
+            {%for product in products%}
+            {%for proName, data in product.items%}
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none; text-align: center;">
+                    <script>
+                        document.write(bn);
+                        bn++;
+                    </script>
+                </td>
+                <td colspan="5" style="border-top: none; border-bottom:none;text-align: center;">{{proName}}</td>
+                <td colspan="1" style="border-top: none; border-bottom:none;text-align: center;">{{data.hsnCode}}</td>
+                <td colspan="1" style="border-top: none; border-bottom:none; text-align: center;">
+                    <script>
+                        document.write(Math.abs(`{{data.netWt}}`).toFixed(3))
+                    </script>
+                </td>
+                <td colspan="1" style="border-top: none; border-bottom:none;text-align: center;">{{data.qty}}</td>
+                <td colspan="1" style="border-top: none; border-bottom:none;text-align: center;">
+                    <script>
+                        document.write(Math.abs(`{{data.cpp}}`).toFixed(2))
+                    </script>
+                </td>
+                <td colspan="1" style="border-top: none; border-bottom:none;text-align: center;">
+                    <script>
+                        document.write(Math.abs(`{{data.totalAmount}}`).toFixed(2))
+
+                        qty += Math.abs(`{{data.qty}}`);
+                        netWt += Math.abs(`{{data.netWt}}`);
+                        totalAmount += Math.abs(`{{data.totalAmount}}`);
+                    </script>
+                </td>
+            </tr>
+            {%endfor%}
+            {%endfor%}
+
+            {%if not nextLevel%}
+            {%for i in empty%}
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;">&nbsp;</td>
+                <td colspan="5" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            </tr>
+            {%endfor%}
+            {%endif%}
+
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;">&nbsp;</td>
+                <td colspan="5" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            </tr>
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none; "></td>
+                <td colspan="5" style="border-top: none; border-bottom:none; text-align: right;">
+                    <input type="text" value="{{amtDesc}}" class="amtDesc" oninput="amtDesc(this.value)"
+                        style="border: none;text-align: right;">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td colspan="1" style="text-align: center;">
+                    <script>
+                        document.write(totalAmount.toFixed(2))
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none; "></td>
+                <td colspan="5" style="border-top: none; border-bottom:none; text-align: right;">
+                </td>
+                <td colspan="1"></td>
+                <td colspan="1" style="text-align: center;">
+                    <script>
+                        document.write(netWt.toFixed(3))
+                    </script>
+                </td>
+                <td colspan="1" style="text-align: center;">
+                    <script>
+                        document.write(qty)
+                    </script>
+                </td>
+                <td colspan="1"></td>
+                <td colspan="1" style="text-align: center;">
+                    <script>
+                        document.write(totalAmount.toFixed(2))
+                    </script>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="11" style="border-bottom:none;">
+
+                    <script>
+                        dec = (totalAmount - Math.trunc(totalAmount)).toFixed(2);
+                        dec = dec.substr(2);
+                        amt = (inWords(Math.trunc(totalAmount)) +
+                            ` {{currencyCode}}` + ' and ' + inWords(
+                                dec) +
+                            ' {{fractionalCurrencyCode}} Only');
+                        document.write(
+                            `<input type="text" value="{{cf_fob}}` +
+                            amt +
+                            `"
+                        style="width: 99%;font-weight: bold;border: none;" class="totalAmount" oninput="change_cf_fob(this.value)">`
+                        );
+                    </script>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="6" style="border-bottom: none; border-left: none; border-right: none;">&nbsp;</td>
+                <td colspan="5" rowspan="6" style="text-align: center; border-bottom: none;">
+                    <b>Certified that particulars given above are true and correct.<br>
+                        FOR AKAL SPRING LTD.</b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: none;">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: none;"><b>Number
+                        Of Packages: {{totalBoxes}} Packages</b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: none;"><b>Net
+                        Weight:
+                        <script>
+                            document.write(Math.abs(`{{netWt}}`).toFixed(3))
+                        </script>
+                        kgs
+                    </b> <input type="text" value="{{withComponents}}" style="border: none;" class="withComponents"
+                        oninput="changeWithComponents(this.value)"> </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: none;"><b>Gross
+                        Weight:
+                        <script>
+                            document.write(Math.abs(`{{netGrossWt}}`).toFixed(3))
+                        </script>
+                        kgs
+                    </b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: none;"><b>Shipping
+                        Mark:
+                        <input type="text" value="{{shippingMark}}" onclick="this.style.border=`none`"
+                            style="width: 50%;border: none;" oninput="changeShippingMark(this.value)"
+                            class="shippingMark"></b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-bottom: none;">&nbsp;</td>
+                <td colspan="5" rowspan="6" style="border-top: none; text-align: center;">
+                    <b>AUTHORISED SIGNATORY.</b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-top: none;border-bottom: none;"><b>BANK
+                        DETAILS:</b> </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-top: none;border-bottom: none;"><b>BANK
+                        AUTHORISED DEALER CODE NO: 0260523 3300009</b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-top: none;border-bottom: none;"><b>BANK
+                        ACCOUNT NUMBER: 6560364035</b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-top: none;border-bottom: none;"><b>BANK
+                        BRANCH IFSC: IDIB000L573</b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-top: none;"><b>SWIFT CODE: IDIBINBBLDN</b></td>
+            </tr>
+        </table>
+    </div>
+    <div>Continuation........{{forloop.counter}}</div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    {%endfor%}
+
+    <div id="pdfFormer">
+        <table border="1" style="height: 50%; width: 100%;">
+            <tbody cellpadding="2">
+                <tr>
+                    <td colspan="9">
+                        <h1 style="text-align: center;">EXPORT INVOICE</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100">
+                        <h3 style="text-align:center;">Supply meant for export under Letter of undertaking with
+                            payment
+                            of IGST</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan=2 colspan=3>
+                        <b>Exporter:</b>
+                        <br>
+                        <b>AKAL SPRING LTD</b><br>
+                        <b>A-8, PHASE V, FOCAL POINT</b><br>
+                        <b>LUDHIANA - 141 010, INDIA</b>
+                    </td>
+                    <td colspan="3" style="text-align: center; border-bottom: none;">
+                        Invoice No. & Date:<br>
+                    </td>
+                    <td colspan="2" style="border-bottom: none; text-align: center;">Exporter's Ref:</td>
+                </tr>
+                </td>
+                <tr>
+                    <td colspan="3" style="border-top:none; text-align: center;"><b>
+                            <script>
+                                document.write(parserInvoice(`{{invoice}}`));
+                            </script> Dt. {{billDate}}
+                        </b>
+                    </td>
+                    <td style="border-top:none; text-align: center;" colspan="2"><br>
+                        <b>IEC NO.3089007959</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" rowspan="3"></td>
+                    <td colspan="5">Other Reference(s):&nbsp;&nbsp;&nbsp;&nbsp;{{otherReferences}}</td>
+                </tr>
+                <tr>
+                    <td colspan="5">GST NO. 03AABCA4456A1ZF</td>
+                </tr>
+                <tr>
+                    <td colspan="5">Other Than Consignee: <br>
+                        <b><input type="text" value="{{otherThanConsignee}}" style="border: none;width: 100%;"></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" rowspan="3">
+                        <b>
+                            Consignee:-<br>
+                        </b>
+                        <br>
+                        <input type="text" value="{{customerId.name}}" onclick="this.style.border = `none`"
+                            style="font-size: 1rem; font-weight: bold; width: 90%;border: none;" class="compName"
+                            oninput="updatecompName(this.value)">
+
+                        {%if customerId.split_address%}
+                        <input type="text" value="{{customerId.address1}}" onclick="this.style.border = `none`"
+                            style="font-size: 1rem; font-weight: bold; width: 90%;border: none;" class="address"
+                            oninput="updateAddress(this.value)">
+                        <input type="text" value="{{customerId.address2}}" onclick="this.style.border = `none`"
+                            style="font-size: 1rem; font-weight: bold; width: 90%;border: none;" class="address"
+                            oninput="updateAddress(this.value)">
+                        {%else%}
+                        <input type="text" value="{{customerId.address}}" onclick="this.style.border = `none`"
+                            style="font-size: 1rem; font-weight: bold; width: 90%;border: none;" class="address"
+                            oninput="updateAddress(this.value)">
+                        {%endif%}
+
+                        <input type="text" value="{{customerId.country}}" onclick="this.style.border = `none`"
+                            style="font-size: 1rem; font-weight: bold; width: 90%;border: none;" class="country"
+                            oninput="updateCountry(this.value)">
+                    </td>
+                    <td colspan="5"><b>Bill of Lading No:- {{billOfLadingNo}}
+                            {%if ladingDate %} DT. {{ladingDate}} {%endif%}</b></td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: center;">Country of Origin of Goods<br>
+                        <b>INDIA</b>
+                    </td>
+                    <td colspan="2" style="text-align: center;">Country of Final Destination<br>
+                        <b>{{customerId.country}}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <b>Terms of Payment :-<br>
+                            {{termOfPayment}}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="1">Pre- Carriage<br>
+                        {{preCarriage}}
+                    </td>
+                    <td colspan="1">
+                        Place of Receipt by Pre-Carrier<br>
+                        Ludhiana
+                    </td>
+                    <td colspan="6" rowspan="3">
+                        <b>Nature of Contract :-<br>
+                            {{natureOfContract}}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Vessel / Flight No.<br>
+                        {{vesselFlightNo}}
+                    </td>
+                    <td>
+                        Port of Loading:<br>
+                        {{portOfLoading}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Port of Discharge: <br>
+                        {{portOfDischarge}}
+                    </td>
+                    <td>Final Destination:<br>
+                        {{finalDestination}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table border="1" style="height: 50%; width: 100%;">
+            <tr>
+                <td colspan="1" style="text-align: center;"><b>Sr. No.</b></td>
+                <td colspan="5" style="text-align: center;"><b>Description of Good</b></td>
+                <td colspan="1" style="text-align: center;"><b>HSN Code</b></td>
+                <td colspan="1" style="text-align: center;"><b>Net WT. (kg)</b></td>
+                <td colspan="1" style="text-align: center;"><b>Qty(Pcs.)</b></td>
+                <td colspan="1" style="text-align: center;"><b>Rate/PCS({{currencyCode}})</b></td>
+                <td colspan="1" style="text-align: center;"><b>Total Amount({{currencyCode}})</b></td>
+            </tr>
+            <tr>
+                <td colspan="1" style="border-bottom: none;"></td>
+                <td colspan="5" style="border-bottom: none;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <textarea onclick="this.style.border=`none`;" style="width:98%; text-align: center;border: none;"
+                        oninput="changeDescription(this.value)"
+                        class="descriptionOfGoods">{{descriptionOfGoods}}</textarea>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td colspan="1" style="border-bottom: none;"></td>
+                <td colspan="1" style="border-bottom: none;"></td>
+                <td colspan="1" style="border-bottom: none;"></td>
+                <td colspan="1" style="border-bottom: none;"></td>
+                <td colspan="1" style="border-bottom: none;"></td>
+            </tr>
+            {%for product in eProds%}
+            {%for proName, data in product.items%}
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none;text-align:center">
+                    <script>
+                        document.write(bn);
+                        bn++;
+                    </script>
+                </td>
+                <td colspan="5" style="border-top: none; border-bottom:none;text-align:center">{{proName}}</td>
+                <td colspan="1" style="border-top: none; border-bottom:none;text-align:center">{{data.hsnCode}}</td>
+                <td colspan="1" style="border-top: none; border-bottom:none; text-align: center;">
+                    <script>
+                        document.write(Math.abs(`{{data.netWt}}`).toFixed(3))
+                    </script>
+                </td>
+                <td colspan="1" style="border-top: none; border-bottom:none;text-align: center;">{{data.qty}}</td>
+                <td colspan="1" style="border-top: none; border-bottom:none;text-align: center;">
+                    <script>
+                        document.write(Math.abs(`{{data.cpp}}`).toFixed(2))
+                    </script>
+                </td>
+                <td colspan="1" style="border-top: none; border-bottom:none;text-align: center;">
+                    <script>
+                        document.write(Math.abs(`{{data.totalAmount}}`).toFixed(2))
+
+                        qty += Math.abs(`{{data.qty}}`);
+                        netWt += Math.abs(`{{data.netWt}}`);
+                        totalAmount += Math.abs(`{{data.totalAmount}}`);
+                    </script>
+                </td>
+            </tr>
+            {%endfor%}
+            {%endfor%}
+
+            {%if nextLevel%}
+            {%for i in empty%}
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;">&nbsp;</td>
+                <td colspan="5" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            </tr>
+            {%endfor%}
+            {%endif%}
+
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none;"></td>
+                <td colspan="5" style="border-top: none; border-bottom:none; text-align: center;">
+                    <textarea class="descri" oninput="changeDescri(this.value)">{{descri}}</textarea>
+                </td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none;"></td>
+            </tr>
+
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;">&nbsp;</td>
+                <td colspan="5" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+                <td colspan="1" style="border-top: none; border-bottom:none; border-top: none;"></td>
+            </tr>
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none; "></td>
+                <td colspan="5" style="border-top: none; border-bottom:none; text-align: right;">
+                    <input type="text" value="{{amtDesc}}" class="amtDesc" oninput="amtDesc(this.value)"
+                        style="border: none; text-align: right;">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td colspan="1" style="text-align: center;">
+                    <script>
+                        document.write(totalAmount.toFixed(2))
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none;"></td>
+                <td colspan="5" style="border-top: none; border-bottom:none; text-align: right;">Add Freight
+                    ({{currencyCode}}):</td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none; text-align: center;">
+                    <script>
+                        document.write(Math.abs(`{{freightCharges}}`).toFixed(2));
+                        totalAmount += Math.abs(`{{freightCharges}}`)
+                    </script>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none;"></td>
+                <td colspan="5" style="border-top: none; border-bottom:none; text-align: right;">
+                    <select style="border: none;">
+                        <option>Discount</option>
+                        <option>Advance</option>
+                    </select>
+                    ({{currencyCode}}):
+                </td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none;"></td>
+                <td colspan="1" style="border-top: none; text-align: center;">
+                    <script>
+                        document.write(parseFloat(`{{discount}}`).toFixed(2))
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1" style="border-top: none; border-bottom:none; "></td>
+                <td colspan="5" style="border-top: none; border-bottom:none; text-align: right;">Total
+                    Amount({{currencyCode}})
+                </td>
+                <td colspan="1"></td>
+                <td colspan="1" style="text-align: center;">
+                    <script>
+                        document.write(netWt.toFixed(3))
+                    </script>
+                </td>
+                <td colspan="1" style="text-align: center;">
+                    <script>
+                        document.write(qty)
+                    </script>
+                </td>
+                <td colspan="1"></td>
+                <td colspan="1" style="text-align: center;">
+                    <script>
+                        totalAmount = totalAmount - {{ discount }}
+                        document.write(totalAmount.toFixed(2))
+                    </script>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="11" style="border-bottom:none;">
+
+                    <script>
+                        dec = (totalAmount - Math.trunc(totalAmount)).toFixed(2);
+                        dec = dec.substr(2);
+                        amt = (inWords(Math.trunc(totalAmount)) +
+                            ` {{currencyCode}}` + ' and ' + inWords(
+                                dec) +
+                            ' {{fractionalCurrencyCode}} Only');
+
+                        "{%if flag%}"
+                        amt = ""
+                        "{%endif%}"
+                        document.write(
+                            `<input type="text" value="{{cf_fob}}` +
+                            amt +
+                            `"
+                        style="width: 99%;font-weight: bold; border:none;" class="totalAmount" oninput="change_cf_fob(this.value)">`
+                        );
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-bottom: none; border-left: none; border-right: none;">&nbsp;</td>
+                <td colspan="5" rowspan="6" style="text-align: center; border-bottom: none;">
+                    <b>Certified that particulars given above are true and correct.<br>
+                        FOR AKAL SPRING LTD.</b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: none;">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: none;"><b>Number
+                        Of Packages: {{totalBoxes}} Packages</b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: none;"><b>Net
+                        Weight:
+                        <script>
+                            document.write(Math.abs(`{{netWt}}`).toFixed(3))
+                        </script>
+                        kgs <input type="text" value="{{withComponents}}" style="border: none;" class="withComponents"
+                            oninput="changeWithComponents(this.value)">
+                    </b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: none;"><b>Gross
+                        Weight:
+                        <script>
+                            document.write(Math.abs(`{{netGrossWt}}`).toFixed(3))
+                        </script>
+                        kgs
+                    </b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: none;"><b>Shipping
+                        Mark:
+                        <input type="text" value="{{shippingMark}}" onclick="this.style.border=`none`"
+                            style="width: 50%; border: none;" oninput="changeShippingMark(this.value)"
+                            class="shippingMark"></b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-bottom: none;">&nbsp;</td>
+                <td colspan="5" rowspan="6" style="border-top: none; text-align: center;">
+                    <b>AUTHORISED SIGNATORY.</b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-top: none;border-bottom: none;"><b>BANK
+                        DETAILS:</b> </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-top: none;border-bottom: none;"><b>BANK
+                        AUTHORISED DEALER CODE NO: 0260523 3300009</b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-top: none;border-bottom: none;"><b>BANK
+                        ACCOUNT NUMBER: 6560364035</b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-top: none;border-bottom: none;"><b>BANK
+                        BRANCH IFSC: IDIB000L573</b></td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border-top: none;"><b>SWIFT CODE: IDIBINBBLDN</b></td>
+            </tr>
+        </table>
+    </div>
+
+
+</body>
+<script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+
+<script>
+    const tx = document.getElementsByClassName("descri");
+    for (let i = 0; i < tx.length; i++) {
+        tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
+        tx[i].setAttribute("style", "text-align: center");
+        tx[i].style.width = "80%";
+        tx[i].style.border = "none";
+        tx[i].addEventListener("input", OnInput, false);
+    }
+
+    function changeDescri(val) {
+        let arr = document.getElementsByClassName("descri");
+
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            element.value = val;
+        }
+
+        let url = "/exportInvoice/changeDescri";
+        $.get(url, {
+            "id": `{{billId}}`,
+            "val": val,
+        }, function (data, response) {
+            return;
+        })
+    }
+
+    function OnInput() {
+        this.style.height = "auto";
+        this.style.height = (this.scrollHeight) + "px";
+    }
+
+
+    function changeWithComponents(val) {
+        let arr = document.getElementsByClassName("withComponents");
+
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            element.value = val;
+        }
+
+        let url = "/exportInvoice/changeWithComponents";
+        $.get(url, {
+            "id": `{{billId}}`,
+            "val": val,
+        }, function (data, response) {
+            return;
+        })
+    }
+
+    function changeDescription(val) {
+        let arr = document.getElementsByClassName("descriptionOfGoods");
+
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            element.value = val;
+        }
+
+        let url = "/exportInvoice/changeDescription";
+        $.get(url, {
+            "id": `{{billId}}`,
+            "val": val,
+        }, function (data, response) {
+            return;
+        })
+    }
+
+    function changeShippingMark(val) {
+        let arr = document.getElementsByClassName("shippingMark");
+
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            element.value = val;
+        }
+
+        let url = "/exportInvoice/changeShippingMark";
+
+        $.get(url, {
+            "id": `{{billId}}`,
+            "val": val,
+        }, function (data, response) {
+            return;
+        })
+
+    }
+
+    function amtDesc(val) {
+        let arr = document.getElementsByClassName("amtDesc");
+
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            element.value = val;
+        }
+
+        let url = "/exportInvoice/changeAmtDesc";
+
+        $.get(url, {
+            "id": `{{billId}}`,
+            "val": val,
+        }, function (data, response) {
+            return;
+        })
+    }
+
+    function change_cf_fob(val) {
+        let url = "/exportInvoice/changeCFFOB";
+
+        $.get(url, {
+            "id": `{{billId}}`,
+            "val": val,
+        }, function (data, response) {
+            return;
+        })
+    }
+
+    function updatecompName(val) {
+        let arr = document.getElementsByClassName("compName");
+
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            element.value = val;
+        }
+
+        let url = "/exportInvoice/updatecompName";
+
+        $.get(url, {
+            "id": `{{billId}}`,
+            "val": val,
+        }, function (data, response) {
+            return;
+        })
+    }
+
+    function updateAddress(val) {
+        let arr = document.getElementsByClassName("address");
+
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            element.value = val;
+        }
+
+        let url = "/exportInvoice/updateAddress";
+
+        $.get(url, {
+            "id": `{{billId}}`,
+            "val": val,
+        }, function (data, response) {
+            return;
+        })
+    }
+
+    function updateCountry(val) {
+        let arr = document.getElementsByClassName("country");
+
+        for (let index = 0; index < arr.length; index++) {
+            const element = arr[index];
+            element.value = val;
+        }
+
+        let url = "/exportInvoice/updateCountry";
+
+        $.get(url, {
+            "id": `{{billId}}`,
+            "val": val,
+        }, function (data, response) {
+            return;
+        })
+    }
+</script>
+
+</html>

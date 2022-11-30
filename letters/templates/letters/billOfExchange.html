@@ -1,0 +1,124 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+
+<style>
+    body
+    {
+        font-size: 20px;
+    }
+</style>
+
+<script>
+    var a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ',
+        'Eleven ',
+        'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '
+    ];
+    var b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+    function inWords(num) {
+        if (num == '0') return 'Zero ';
+        if ((num = num.toString()).length > 9) return 'overflow';
+        n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+        if (!n) return;
+        var str = '';
+        str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'Crore ' : '';
+        str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'Lakh ' : '';
+        str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'Thousand ' : '';
+        str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'Hundred ' : '';
+        str += (n[5] != 0) ? ((str != '') ? '' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) +
+            '' : '';
+        if(str == '')str = 'Zero '
+
+        return str;
+    }
+</script>
+
+<body>
+    <table style="margin-left: 28%; margin-top: 22%;" width="44%">
+        <tr>
+            <td colspan="6">
+                Bill Of Exhange No. {{bill.exchangeNo}}<br>
+                Dated: {{bill.exchangeDate}}<br>
+                AMOUNT {{bill.currency}} <script>document.write(Math.abs(`{{bill.totalSales}}`).toFixed(2))</script><br>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" style="text-align: center;">
+                <h3>BILL OF EXCHANGE</h3>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <b>DRAWN UNDER IRREVOCABLE DOCUMENTARY CREDIT NO. {{bill.lcNo}} DT. {{bill.lcDate}} OF
+                    {{bill.consigneeBank}}.</b>
+                    <br>
+                    <br>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                AT SIGHT PLEASE PAY THIS
+                <input type="text" onclick="removeBorder(this)" style="width: 15%;">
+                OF EXCHANGE (<input type="text" onclick="removeBorder(this)" style="width: 15%;"> UNPAID) TO THE ORDER OF
+                INDIAN BANK, 2345, MAIN ROAD, SUNDER NAGAR, DISTT. LUDHIANA, PUNJAB - 141 007- (PUNJAB) INDIA, THE SUM
+                OF {{bill.currency}} <script>document.write(Math.abs(`{{bill.totalSales}}`).toFixed(2))</script> ({{bill.currency}} <script>
+                    totalAmount = `{{bill.totalSales}}`
+                    dec = (totalAmount - Math.trunc(totalAmount)).toFixed(2);
+                        dec = dec.substr(2);
+                        document.write((inWords(Math.trunc(totalAmount)) +
+                            ' Point ' + inWords(
+                                dec) +
+                            ' Only'));
+                </script>) FOR VALUE RECIEVED AGAINST SHIPMENT OF OUR INVOICE
+                NO. {{bill.invoice}} DT. {{bill.billDate}}, BILL OF LADING NO. {{bill.billOfLadingNo}} DATED
+                {{bill.ladingDate}} PER VESSEL {{bill.vesselFlightNo}}.
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6"><b>TO</b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2"><b>{{bill.consigneeBank}}</b></td>
+            <td colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6"><b>ACCOUNT:</b></td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2"><b>{{bill.consigneeAccount}}</b></td>
+            <td colspan="4"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></td>
+        </tr>
+    </table>
+
+    <script>
+        function removeBorder(e) {
+            e.style.border = "none"
+        }
+    </script>
+
+</body>
+
+</html>

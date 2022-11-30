@@ -1,0 +1,244 @@
+{% extends "./base.html" %}
+
+{% block style %}
+<style>
+    td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    table {
+        table-layout: fixed;
+    }
+
+    ul {
+        display: flex;
+        list-style: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-content bg-white">
+
+    <!-- inner page banner END -->
+    <!-- contact area -->
+    <div class="section-full content-inner shop-account">
+        <!-- Product -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="font-weight-700 m-t0 m-b40">PACKING LIST</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 m-b30">
+                    <div class="p-a30 border-1  max-w800 m-auto">
+                        <div class="tab-content">
+                            <form id="login" class="tab-pane active" action="allBills" method="POST">
+                                {%csrf_token%}
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">TO: </span>
+                                                <input name="billDateFrom" required class="form-control" type="date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">TO: </span>
+                                                <input name="billDateTo" required class="form-control" type="date">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="text-center m-t15">
+                                        <button
+                                            class="site-button button-lg radius-no outline outline-2">Continue</button>
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product END -->
+    </div>
+
+
+    <div class="section-full bg-white content-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sort-title clearfix text-center">
+                        <h4>Packing List On Specified Date</h4>
+                    </div>
+                    <div class="section-content box-sort-in button-example p-t10 p-b30 ">
+                        <div class="dlab-tabs border bg-tabs">
+                            <ul class="nav nav-tabs">
+                                {%for bill in bills%}
+                                <li><a data-toggle="tab" href="#{{bill.id}}" {%if forloop.counter == 1%}class="active"
+                                        {%endif%} onclick="change('{{forloop.counter}}')"><i class="fa fa-book"></i>
+                                        <span class="title-head"> {{bill.invoice}}
+                                        </span></a></li>
+                                {%endfor%}
+                            </ul>
+                            <div class="tab-content">
+                                {% for bill in bills %}
+                                <div id="{{bill.id}}" class="tab-pane {%if forloop.counter == 1%}active{%endif%}">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Particulars</th>
+                                                <th scope="col">Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Other Reference(s)</td>
+                                                <td>{{bill.otherReferences}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Bill Of Lading No</td>
+                                                <td>{{bill.billOfLadingNo}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Country of Origin of Goods</td>
+                                                <td>India</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Country of Final Destination</td>
+                                                <td>{{bill.customerId.company_country}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Consigne</td>
+                                                <td>{{bill.customerId.company_name}},
+                                                    {{bill.customerId.company_address}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Terms of Payment</td>
+                                                <td>{{bill.termsOfPayment}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nature of Contract</td>
+                                                <td>{{bill.natureOfContract}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pre-Carriage</td>
+                                                <td>{{bill.preCarriage}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Place of Receipt by pre-carrier</td>
+                                                <td>Ludhiana</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Vessel/Flight No.</td>
+                                                <td>{{bill.vesselFlightNo}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Port of Loading</td>
+                                                <td>{{bill.portOfLoading}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Port of Discharge</td>
+                                                <td>{{bill.portOfDischarge}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Final Destination</td>
+                                                <td>{{bill.finalDestination}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Shipping Mark</td>
+                                                <td>{{bill.finalDestination}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <br>
+                                    <br>
+                                    <br>
+
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="width: 10%;">BoxNo</th>
+                                                <th scope="col" style="width: 20%;">Description</th>
+                                                <th scope="col" style="width: 8%;">HSNCode</th>
+                                                <th scope="col" style="width: 7%;">Wt Per Pce(kg)</th>
+                                                <th scope="col" style="width: 7%;">Qty(Pcs)</th>
+                                                <th scope="col" style="width: 8%;">Net Wt(kg)</th>
+                                                <th scope="col" style="width: 10%;">Gross Weight</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <script>
+                                                bn = 0;
+                                            </script>
+                                            {%for product in bill.products%}
+                                            <tr>
+                                                <th scope="row">{{product.boxType}}</th>
+                                                <td>{{product.name}}</td>
+                                                <td>{{product.hsnCode}}</td>
+                                                <td>
+                                                    <script>
+                                                        document.write(Math.abs("{{product.weight}}").toFixed(3));
+                                                    </script>
+                                                </td>
+                                                <td>{{product.qty}}</td>
+                                                <td>
+                                                    <script>
+                                                        document.write(Math.abs(`{{product.qty}}` *
+                                                            `{{product.weight}}`).toFixed(3))
+                                                    </script>
+                                                </td>
+                                                <td>
+                                                    <script>
+                                                        document.write(Math.abs(`{{product.qty}}` *
+                                                            `{{product.weight}}` + Math.abs(`{{product.boxWt}}`)
+                                                            ).toFixed(3))
+                                                    </script>
+                                                </td>
+                                            </tr>
+                                            {%endfor%}
+                                        </tbody>
+                                    </table>
+                                    <div class="text-center m-t15">
+                                        <button class="site-button radius-no outline outline-2"
+                                            onclick="getPdf('{{bill.id}}')">
+                                            Download Pdf</button>
+                                    </div>
+                                </div>
+                                {%endfor%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- </div> -->
+</div>
+{% endblock content %}
+
+
+
+{% block script %}
+
+<script>
+    billNo = 1;
+
+    function change(pos) {
+        billNo = pos;
+    }
+
+    function getPdf(id) {
+        window.open("http://127.0.0.1:8000/packingList/pdf?id=" + id + "&billNo=" + billNo)
+    }
+</script>
+
+{% endblock %}

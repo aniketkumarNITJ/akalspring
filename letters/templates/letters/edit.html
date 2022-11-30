@@ -1,0 +1,227 @@
+{% extends "./base.html" %}
+
+{% block style %}
+<style>
+    td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    table {
+        table-layout: fixed;
+    }
+
+    ul {
+        display: flex;
+        list-style: none;
+    }
+
+    .modal-body {
+        max-height: calc(90vh - 200px);
+        overflow-y: auto;
+    }
+</style>
+
+<script>
+    let totalProds = 0;
+
+    function parser(str) {
+        while (str.slice(-1) == '1' || str.slice(-1) == '2' || str.slice(-1) == '3' || str.slice(-1) == '4' || str
+            .slice(-1) == '5' || str.slice(-1) == '6' || str.slice(-1) == '7' || str.slice(-1) == '8' || str.slice(-
+                1) == '9' || str.slice(-1) == '0' || str.slice(-1) == ' ') {
+            str = str.slice(0, -1);
+        }
+
+        return str;
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-content bg-white">
+
+    <!-- inner page banner END -->
+    <!-- contact area -->
+
+
+    <div class="section-full bg-white content-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sort-title clearfix text-center">
+                        <h4>EDIT BILL WITH INVOICE {{bill.invoice}}</h4>
+                    </div>
+                    <div class="section-content box-sort-in button-example p-t10 p-b30 ">
+                        <div id="addNewBill" class="tab-pane">
+                            <form id="login" class="tab-pane active" method="POST" action="saveEdit">
+                                {% csrf_token %}
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Particulars</th>
+                                            <th scope="col">Data</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>LC No</td>
+                                            <td>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input name="lcNo" type="text" class="form-control"
+                                                                value="{{bill.lcNo}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>LC Date</td>
+                                            <td>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input name="lcDate" type="date" class="form-control"
+                                                                value="{{bill.lcDate}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Contract No</td>
+                                            <td>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input name="contractNo" type="text" class="form-control"
+                                                                value="{{bill.contractNo}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Contract Date</td>
+                                            <td>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input name="contractDate" type="date" class="form-control"
+                                                                value="{{bill.contractDate}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Shipping Bill No</td>
+                                            <td>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input name="shippingBillNo" type="text"
+                                                                class="form-control" value="{{bill.shippingBillNo}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Shipping Bill Date</td>
+                                            <td style="overflow: visible;">
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="col-lg-6 col-md-6">
+                                                            <input name="shippingDate" type="date"
+                                                                class="form-control" value="{{bill.shippingBillDate}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Exchange No</td>
+                                            <td>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input name="exchangeNo" type="text"
+                                                                class="form-control"
+                                                                value="{{bill.exchangeNo}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Exchange Date</td>
+                                            <td>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input name="exchangeDate" type="date"
+                                                                class="form-control" 
+                                                                value="{{bill.exchangeDate}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Consigne Bank</td>
+                                            <td>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input name="consigneBank" type="text"
+                                                                class="form-control"
+                                                                value="{{bill.consigneeBank}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Consigne Account</td>
+                                            <td>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input name="consigneAccount" type="text"
+                                                                class="form-control"
+                                                                value="{{bill.consigneeAccount}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <input type="number" name="id" id="id" style="display: none;" value="{{bill.id}}">
+                                <div class="text-center m-t15"></div>
+                                <div class="text-center m-t15">
+                                <button class="site-button radius-no outline outline-2" data-toggle="modal">
+                                        Save Changes 
+                                </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- </div> -->
+</div>
+{% endblock content %}
+
+
+{% block script %}
+<script>
+</script>
+{% endblock %}

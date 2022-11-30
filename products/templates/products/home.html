@@ -1,0 +1,233 @@
+{% extends "./base.html" %}
+
+{% block style %}
+<style>
+    td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    table {
+        table-layout: fixed;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-content bg-white">
+
+    <!-- inner page banner END -->
+    <!-- contact area -->
+    <div class="section-full content-inner shop-account">
+        <!-- Product -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="font-weight-700 m-t0 m-b40">Add New Product</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 m-b30">
+                    <div class="p-a30 border-1  max-w500 m-auto">
+                        <div class="tab-content">
+                            <form id="login" class="tab-pane active" method="POST" action="addproduct">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="font-weight-700">Product</label>
+                                    <input name="productName" required="" class="form-control"
+                                        placeholder="Enter New Product Name" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-weight-700">HSN Code</label>
+                                    <input name="hsnCode" required="" class="form-control"
+                                        placeholder="Enter New Product HSN Code" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="font-weight-700">Weight</label>
+                                    <input name="weight" required="" class="form-control"
+                                        placeholder="Enter Weight Of a Single Item Of Product in kgs" type="text">
+                                </div>
+                                <div class="text-center m-t15">
+                                    <button class="site-button button-lg radius-no outline outline-2"> Add &nbsp;<i
+                                            class="fa fa-plus-circle"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product END -->
+    </div>
+
+
+    <div class="section-full bg-white content-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="sort-title clearfix text-center">
+                        <h4>All Products</h4>
+                    </div>
+                    <div class="section-content box-sort-in button-example p-t10 p-b30 ">
+
+                        <div class="tab-content">
+                            <div id="web-design-4" class="tab-pane active">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="width: 30%;">Product Name</th>
+                                            <th scope="col" style="width: 15%;">HSN Code</th>
+                                            <th scope="col" style="width: 15%;">Weight (in kgs)</th>
+                                            <th scope="col" style="width: 40%;">Editing</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        {% for product in products %}
+                                        <tr id="{{product.product_name}}">
+                                            <td id="name{{product.product_name}}">{{product.product_name}}</td>
+                                            <td id="code{{product.product_name}}">{{product.hsnCode}}</td>
+                                            <td id="weight{{product.product_name}}">
+                                                <script>
+                                                    document.write(Math.abs("{{product.weight}}").toFixed(3))
+                                                </script>
+                                            </td>
+                                            <td>
+
+                                                <div class="section-content box-sort-in  button-example m-b30">
+                                                    <button class="site-button orange m-r15" type="button"
+                                                        onclick="editing(`{{product.product_name}}`,`{{product.hsnCode}}`, {{product.weight}})">Edit
+                                                        &nbsp;<i class="fa fa-cog" aria-hidden="true"></i></button>
+                                                    <button class="site-button red m-r15" type="button"
+                                                        onclick="del(`{{product.product_name}}`)">Delete &nbsp;<i
+                                                            class="fa fa-trash" aria-hidden="true"></i></button>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="editorOpen"
+    style="display: none;" data-whatever=""></button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Prduct</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Name:</label>
+                        <textarea class="form-control" id="editorName" rows="2"
+                            style="border: 1px solid black; border-radius: 5px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">HSN Code:</label>
+                        <textarea class="form-control" id="editorCode" rows="2"
+                            style="border: 1px solid black; border-radius: 5px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Weight: </label>
+                        <textarea class="form-control" id="editorWeight" rows="2"
+                            style="border: 1px solid black; border-radius: 5px;"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="closer"
+                    onclick="close()">Close</button>
+                <button type="button" class="btn btn-success" id="saver" onclick="saveChanges()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block script %}
+<script>
+    function del(name) {
+        if (confirm("Are you sure to delete?")) {
+
+            $.post("deleteProd", {
+                    name: name,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                function (data, status) {
+                    if (status == "success") {
+                        var e = document.getElementById(name);
+                        e.style.display = 'none';
+
+                    }
+
+                    alert(data);
+                });
+        }
+    }
+
+    function editing(prev_name, prev_code, prev_weight) {
+        document.getElementById("editorName").value = prev_name;
+        document.getElementById("editorCode").value = prev_code;
+        document.getElementById("editorWeight").value = prev_weight;
+        document.getElementById("saver").value = prev_name;
+        document.getElementById("editorOpen").click()
+    }
+
+    function saveChanges() {
+        let prev_name = document.getElementById("saver").value
+        let newName = document.getElementById("editorName").value;
+        let newCode = document.getElementById("editorCode").value;
+        let newWeight = document.getElementById("editorWeight").value;
+        document.getElementById("closer").click();
+
+        $.post("editProd", {
+                prev_name: prev_name,
+                name: newName,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                hsnCode: newCode,
+                weight: newWeight,
+            },
+            function (data, status) {
+
+                if (status == "success") {
+
+                    document.getElementById("name" + prev_name).innerText = newName;
+                    document.getElementById("code" + prev_name).innerText = newCode;
+                    document.getElementById("weight" + prev_name).innerText = newWeight;
+
+                    document.getElementById("name" + prev_name).id = "name" + newName;
+                    document.getElementById("code" + prev_name).id = "code" + newName;
+                    document.getElementById("weight" + prev_name).id = "weight" + newName;
+                }
+
+                alert(data);
+            });
+    }
+
+    function close() {
+        document.getElementById("editorName").value = "";
+        document.getElementById("editorCode").value = "";
+        document.getElementById("editorWeight").value = "";
+    }
+</script>
+{% endblock %}

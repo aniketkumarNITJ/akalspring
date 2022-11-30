@@ -1,0 +1,122 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    body
+    {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <table style="margin-left: 15%; margin-top: 22%;" width="70%">
+        <tr>
+            <td colspan="4">Ref No. ASL/
+                <script>
+                    var currentTime = new Date()
+                    var year = currentTime.getFullYear()
+                    document.write(year);
+                    document.write(" - ");
+                    document.write(year + 1);
+                </script>
+            </td>
+            <td colspan="2" style="text-align: right;">Date: <input type="text" onclick="removeBorder(this)"></td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                The Asst. General Manager,<br>
+                INDIAN BANK,<br>
+                2345, MAIN ROAD, SUNDER NAGAR,<br>
+                DISTT. LUDHIANA<br>
+                PUNJAB- 141007<br>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <b>Sub: Shipment against our Invoice No. {{bill.invoice}} Dated {{bill.billDate}}</b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <b>Ref: Shipment against L/C No. {{bill.lcNo}} DT. {{bill.lcDate}}</b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Dear Sir,</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">We confirm having shipped {{bill.totalBoxes}} boxes containing Leaf Springs, as per the Contract No. {{bill.contractNo}}
+                DD. {{bill.contractDate}} to M/s {{bill.customerId}} vide Bill of Lading No. {{bill.billOfLadingNo}} DT. {{bill.ladingDate}} Per Vessel {{bill.vesselFlightNo}}<br>
+                <br>
+                We are enclosing herewith the following documents.
+                <br>
+                <br>
+                1. Invoice - 1 copy for {{bill.currency}} <script>document.write(Math.abs(`{{bill.totalSales}}`).toFixed(2))</script><br>
+                2. Packing List - 1 copy<br>
+                3. Bill Of Lading - 1 copy<br>
+                4. Exporter Copy of Shipping Bill No. {{bill.shippingBillNo}} DT. {{bill.shippingBillDate}}<br>
+                5. Copy Of L/C<br>
+                6. Form -A<br>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Thanking You</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Yours Truly</td>
+        </tr>
+        <tr>
+            <td colspan="6">For AKAL SPRING LIMITED</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">DIRECTOR</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">Encl: as above</td>
+        </tr>
+    </table>
+</body>
+
+<script>
+    function removeBorder(e) {
+        e.style.border = "none"
+    }
+</script>
+
+</html>

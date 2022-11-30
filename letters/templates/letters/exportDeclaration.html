@@ -1,0 +1,72 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+
+<style>
+    body {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <table style="margin-left: 25%; margin-top: 15%;" width="50%">
+        <tr>
+            <td colspan="6" style="text-align: center;">
+                <h3>EXPORT DECLARATION</h3>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                We hereby declare that we have shipped {{bill.totalBoxes}} boxes (<script>
+                    document.write(Math.abs(`{{totalWeight}}`).toFixed(3))
+                </script> kgs) containing LEAF SPRINGS, as per the
+                Contract No {{bill.contractNo}} Dt {{bill.contractDate}} to M/s. {{bill.customerId}},
+                {{bill.customerId.company_address}}, {{bill.customerId.company_country}} vide our Invoice No.
+                {{bill.invoice}} Dated {{bill.billDate}}, Bill of Lading No.
+                {{bill.billOfLadingNo}} Dated {{bill.ladingDate}} Per Vessel {{bill.vesselFlightNo}}.
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6"><b>Documentary Credit No. {{bill.lcNo}} Dated {{bill.lcDate}}</b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="6"><b>For Akal Spring LTD. </b></td>
+        </tr>
+        <tr>
+            <td colspan="6">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="1">&nbsp;</td>
+            <td colspan="6"><b>Director</b></td>
+        </tr>
+        <tr>
+            <td colspan="6"><b>Authorised Signatory</b></td>
+        </tr>
+    </table>
+</body>
+
+</html>

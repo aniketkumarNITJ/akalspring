@@ -1,0 +1,272 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Industry - Factory & Industrial HTML Template" />
+    <meta property="og:title" content="Industry - Factory & Industrial HTML Template" />
+    <meta property="og:description" content="Industry - Factory & Industrial HTML Template" />
+    <meta property="og:image" content="" />
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- FAVICONS ICON -->
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}" />
+
+    <!-- PAGE TITLE HERE -->
+    <title>AKAL SPRING TOOLS</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--[if lt IE 9]>
+	<script src="js/html5shiv.min.js"></script>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.min.css' %}">
+    <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-2.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/templete.min.css' %}">
+    <!-- Google Font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i|Playfair+Display:400,400i,700,700i,900,900i|Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap');
+    </style>
+
+    <!-- REVOLUTION SLIDER CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/revolution/revolution/css/revolution.min.css' %}">
+    <style>
+        .owl-prev {
+            display: none;
+        }
+
+        .owl-next {
+            display: none;
+        }
+    </style>
+    {% block style %}{% endblock %}
+</head>
+
+<body id="bg">
+
+    <div class="page-wraper">
+        <div id="loading-area"></div>
+        <!-- header -->
+        <header class="site-header mo-left header-full header header-transparent header-sidenav onepage white">
+            <!-- main header -->
+            <div class="sticky-header main-bar-wraper navbar-expand-lg">
+                <div class="main-bar clearfix">
+                    <div class="container-fluid p-r0">
+                        <div class="header-content-bx">
+                            <!-- website logo -->
+                            <div class="logo-header logo-white">
+                                <a href="./"><img src="{% static 'images/akalLogo.png' %}" alt="" /></a>
+                            </div>
+                            <div class="extra-nav">
+                                <div class="extra-cell">
+                                    <ul>
+                                        <li class="search-btn">
+                                            <a href="javascript:;" class="menu-icon">
+                                                <div class="menu-icon-in">
+                                                    <span></span>
+                                                    <span></span>
+                                                    <span></span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-nav navbar-collapse collapse full-sidenav navbar">
+                <div class="logo-header logo-dark">
+                    <a href="#"><img src="{% static 'images/logo.png' %}" alt="" /></a>
+                </div>
+                <ul class="nav navbar-nav ">
+                    <li><a href="/master">Master</a></li>
+                    <li><a href="/exportInvoice">Export Invoice</a></li>
+                    <li><a href="/packingList/">Packing List</a></li>
+                    <li><a href="/products">Products</a></li>
+                    <li><a href="/companies">Companies</a></li>
+                    <li><a href="/salesRecord">Sales Record</a></li>
+                    <li><a href="/letters">Letters</a></li>
+                    <li><a href="/proformaInvoice">Proforma Invoice</a></li>
+                </ul>
+            </div>
+            <div class="menu-close">
+                <i class="ti-close"></i>
+            </div>
+            <!-- main header END -->
+        </header>
+        <!-- header END -->
+
+        {% block content %}{% endblock %}
+
+        <div class="section-full bg-white content-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-content box-sort-in m-b30 button-example">
+                            <div
+                                class="blog-carousel mfp-gallery owl-loaded owl-theme owl-carousel gallery owl-btn-center-lr owl-btn-1 primary">
+                                <div class="item">
+                                    <div class="ow-blog-post date-style-2">
+                                        <div class="ow-post-info" style="background-color: #D2151E; color: white;">
+                                            <div class="ow-post-text">
+                                                <p id="GBP" style="text-align: center; font-size: 30px;"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="ow-blog-post date-style-2">
+                                        <div class="ow-post-info" style="background-color: #D2151E; color: white;">
+                                            <div class="ow-post-text">
+                                                <p id="AUD" style="text-align: center; font-size: 30px;">
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="ow-blog-post date-style-2">
+                                        <div class="ow-post-info" style="background-color: #D2151E; color: white;">
+                                            <div class="ow-post-text">
+                                                <p id="EUR" style="text-align: center; font-size: 30px;">
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="ow-blog-post date-style-2">
+                                        <div class="ow-post-info" style="background-color: #D2151E; color: white;">
+                                            <div class="ow-post-text">
+                                                <p id="USD" style="text-align: center; font-size: 30px;">
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- blog post Carousel with no margin END -->
+        </div>
+
+        <!-- Footer -->
+        <footer class="site-footer footer-full">
+            <div class="p-tb60 bg-black">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 text-md-left text-center footer-logo">
+                            <img src="{% static 'images/logo.png' %}" alt="" width="100">
+                            <p class="m-b0 m-t10">Developed By Aniket</p>
+                        </div>
+                        <div class="col-md-6 text-md-right text-center">
+                            <div class="widget-link ">
+                                <ul>
+                                    <li><a href="/master">master</a></li>
+                                    <li><a href="/exportInvoice">export invoice</a></li>
+                                    <li><a href="/packingList/">packing list</a></li>
+                                    <li><a href="/salesRecord">sales record</a></li>
+                                    <li><a href="/letters">letters</a></li>
+                                    <li><a href="/proformaInvoice">Proforma Invoice</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer END -->
+
+        <button class="scroltop style3 radius" type="button"><i class="fa fa-arrow-up"></i></button>
+    </div>
+
+
+    <!-- JAVASCRIPT FILES ========================================= -->
+    <script type="text/javascript" src="{% static 'js/canvasjs.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+    <script src="{% static 'plugins/wow/wow.js' %}"></script><!-- WOW JS -->
+    <script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+    <script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script><!-- FORM JS -->
+    <script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script><!-- FORM JS -->
+    <script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script><!-- MAGNIFIC POPUP JS -->
+    <script src="{% static 'plugins/counter/waypoints-min.js' %}"></script><!-- WAYPOINTS JS -->
+    <script src="{% static 'plugins/counter/counterup.min.js' %}"></script><!-- COUNTERUP JS -->
+    <script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script><!-- IMAGESLOADED -->
+    <script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script><!-- MASONRY -->
+    <script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script><!-- MASONRY -->
+    <script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script><!-- OWL SLIDER -->
+    <script src="{% static 'plugins/lightgallery/js/lightgallery-all.min.js' %}"></script><!-- Lightgallery -->
+    <script src="{% static 'js/custom.js' %}"></script><!-- CUSTOM FUCTIONS  -->
+    <script src="{% static 'js/dz.carousel.min.js' %}"></script><!-- SORTCODE FUCTIONS  -->
+    <script src="{% static 'plugins/countdown/jquery.countdown.js' %}"></script><!-- COUNTDOWN FUCTIONS  -->
+    <script src="{% static 'js/dz.ajax.js' %}"></script><!-- CONTACT JS  -->
+    <script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script><!-- Rangeslider -->
+
+    <script src="{% static 'js/jquery.lazy.min.js' %}"></script>
+    <!-- REVOLUTION JS FILES -->
+    <script src="{% static 'plugins/revolution/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+    <script src="{% static 'plugins/revolution/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+    <!-- Slider revolution 5.0 Extensions  (Load Extensions only on Local File Systems !  The following part can be removed on Server for On Demand Loading) -->
+    <script src="{% static 'plugins/revolution/revolution/js/extensions/revolution.extension.actions.min.js' %}">
+    </script>
+    <script src="{% static 'plugins/revolution/revolution/js/extensions/revolution.extension.carousel.min.js' %}">
+    </script>
+    <script src="{% static 'plugins/revolution/revolution/js/extensions/revolution.extension.kenburn.min.js' %}">
+    </script>
+    <script src="{% static 'plugins/revolution/revolution/js/extensions/revolution.extension.layeranimation.min.js' %}">
+    </script>
+    <script src="{% static 'plugins/revolution/revolution/js/extensions/revolution.extension.navigation.min.js' %}">
+    </script>
+    <script src="{% static 'plugins/revolution/revolution/js/extensions/revolution.extension.parallax.min.js' %}">
+    </script>
+    <script src="{% static 'plugins/revolution/revolution/js/extensions/revolution.extension.slideanims.min.js' %}">
+    </script>
+    <script src="{% static 'plugins/revolution/revolution/js/extensions/revolution.extension.video.min.js' %}"></script>
+    <script src="{% static 'js/rev.slider.js' %}"></script>
+    <script>
+        jQuery(document).ready(function () {
+            'use strict';
+            dz_rev_slider_4();
+            $('.lazy').Lazy();
+        }); /*ready*/
+
+        $.ajax({
+            url: "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json",
+
+            success: function (json) {
+
+                INR = json["eur"]["inr"]
+                USD = json["eur"]["usd"]
+                GBP = json["eur"]["gbp"]
+                AUD = json["eur"]["aud"]
+
+
+                document.getElementById("USD").innerText = '1 USD = ' + (INR / USD).toFixed(2) + 'INR';
+                document.getElementById("EUR").innerText = '1 EUR = ' + (INR).toFixed(2) + 'INR';
+                document.getElementById("GBP").innerText = '1 GBP = ' + (INR / GBP).toFixed(2) + 'INR';
+                document.getElementById("AUD").innerText = '1 AUD = ' + (INR / AUD).toFixed(2) + 'INR';
+            }
+        });
+    </script>
+
+    {% block script %}{% endblock %}
+</body>
+
+</html>

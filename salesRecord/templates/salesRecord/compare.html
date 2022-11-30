@@ -1,0 +1,91 @@
+{% extends "./base.html" %}
+
+{% block style %}
+<style>
+    td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    table {
+        table-layout: fixed;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-content bg-white">
+
+    <!-- inner page banner END -->
+    <!-- contact area -->
+    <div class="section-full content-inner shop-account">
+        <!-- Product -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="font-weight-700 m-t0 m-b40">Comparison Of Sales With All Customers</h2>
+                </div>
+            </div>
+        </div>
+
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+
+    </div>
+
+</div>
+<script>
+    var data = [];
+</script>
+{%for company in companies%}
+<script>
+    data.push({y: {{company.totalSales}}, name: "{{company.customerId}}"})
+</script>
+{%endfor%}
+
+{% endblock content %}
+
+
+{% block script %}
+<script>
+    window.onload = function () {
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "dark2",
+            exportFileName: "Doughnut Chart",
+            exportEnabled: true,
+            animationEnabled: true,
+            title: {
+                text: "Export Sales"
+            },
+            legend: {
+                cursor: "pointer",
+                itemclick: explodePie
+            },
+            data: [{
+                type: "doughnut",
+                innerRadius: 90,
+                showInLegend: true,
+                toolTipContent: "<b>{name}</b>: ${y} (#percent%)",
+                indexLabel: "{name} - #percent%",
+                dataPoints: data,
+            }]
+        });
+        chart.render();
+
+        function explodePie(e) {
+            if (typeof (e.dataSeries.dataPoints[e.dataPointIndex].exploded) === "undefined" || !e.dataSeries
+                .dataPoints[e.dataPointIndex].exploded) {
+                e.dataSeries.dataPoints[e.dataPointIndex].exploded = true;
+            } else {
+                e.dataSeries.dataPoints[e.dataPointIndex].exploded = false;
+            }
+            e.chart.render();
+        }
+
+    }
+</script>
+{% endblock %}
